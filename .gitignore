@@ -1,0 +1,17 @@
+# Mac
+.DS_Store
+
+# Windows
+Thumbs.db
+
+# Unity
+Library
+obj
+Temp
+*.sln
+*.csproj
+*.userprefs
+
+# Tools
+Tools/node_modules/
+Tools/WineData/
