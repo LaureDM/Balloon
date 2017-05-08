@@ -46,7 +46,7 @@ public class BalloonController : MonoBehaviour {
 		float movementVertical = Input.GetAxis("Vertical");
 
 		balloonAnimator.SetBool(IS_MOVING, (movementHorizontal != 0 || movementVertical != 0));
-			
+        			
 		Vector3 movement = new Vector3(movementHorizontal, 0.0f, movementVertical);
 
 		GetComponent<Rigidbody>().velocity = movement * speed;
