@@ -13,8 +13,6 @@ public class SeedDropperScript : MonoBehaviour {
 
 	private SeedDropperScript Instance;
 
-
-
 	public void InstantiateSeed(TreeType treeType)
 	{
 		GameObject prefab = null;

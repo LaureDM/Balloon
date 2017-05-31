@@ -2,12 +2,13 @@
 using System.Collections;
 using AssemblyCSharp.Code.Enums;
 using AssemblyCSharp.Code.Trees;
+using AssemblyCSharp.Code.Controllers;
 
 public class PineTreeScript : MonoBehaviour, ITree
 {
 
-	[SerializeField]
-	private GameObject[] growStages;
+    [SerializeField]
+    private GameObject[] growStages;
 
     [SerializeField]
     private GameObject[] animals;
@@ -18,6 +19,11 @@ public class PineTreeScript : MonoBehaviour, ITree
     [SerializeField]
     private float timeTillNextAnimal;
 
+    [SerializeField]
+    private GameObject[] fruitsSpawnPositions;
+
+    private TreeCollectionScript treeCollection;
+
     private AnimalSpawnerScript animalSpawner;
 
     private Transform currentStagePrefab;
@@ -25,34 +31,45 @@ public class PineTreeScript : MonoBehaviour, ITree
     private float startTime;
     private float rabbitSpawnTime;
 
-	private Rigidbody rigidBody;
+    private Rigidbody rigidBody;
 
     //todo temporary
     private bool isRabbitSpawned;
 
-	void Start () 
+    private Vector3 terrainUp;
+
+    private Vector3 treeScale;
+    private Vector3 treeRotation;
+
+    void Start()
     {
         currentStagePrefab = transform.GetChild(0);
         rigidBody = GetComponent<Rigidbody>();
         animalSpawner = FindObjectOfType<AnimalSpawnerScript>();
-	}
-	
-	// Update is called once per frame
-	void Update () 
+        treeCollection = FindObjectOfType<TreeCollectionScript>();
+    }
+
+    // Update is called once per frame
+    void Update()
     {
         //TODO maybe do with switch if it takes longer for each stage
         if (currentStage != GrowState.SEED && currentStage != GrowState.ADULT && IsReadyToGrow())
         {
             GrowToNextStage();
         }
-        else if(currentStage == GrowState.ADULT && ShouldSpawnRabbit())
+        else if (currentStage == GrowState.ADULT && ShouldSpawnRabbit())
         {
             isRabbitSpawned = true;
             //TODO drop fruits?
             animalSpawner.SpawnAnimal(Animal.RABBIT);
             rabbitSpawnTime = Time.time;
         }
-	}
+        else if (currentStage == GrowState.ADULT && ShouldSpawnFruit())
+        {
+            
+        }
+
+    }
 
     private bool IsReadyToGrow()
     {
@@ -73,7 +90,7 @@ public class PineTreeScript : MonoBehaviour, ITree
             case GrowState.SEED:
 
                 currentStage = GrowState.SEEDLING;
-				newStagePrefab = growStages[0];
+                newStagePrefab = growStages[0];
                 break;
 
             case GrowState.SEEDLING:
@@ -95,11 +112,16 @@ public class PineTreeScript : MonoBehaviour, ITree
 
     private void ChangeStagePrefab(GameObject newStagePrefab)
     {
-		Destroy(currentStagePrefab.gameObject);
+        Destroy(currentStagePrefab.gameObject);
 
         GameObject treeStage = Instantiate(newStagePrefab, transform.position, transform.rotation) as GameObject;
+
 		currentStagePrefab = treeStage.transform;
         currentStagePrefab.parent = gameObject.transform;
+        currentStagePrefab.transform.up = terrainUp;
+
+        currentStagePrefab.localScale = treeScale;
+        currentStagePrefab.transform.Rotate(treeRotation);
 	}
 
     bool ShouldSpawnRabbit()
@@ -107,15 +129,29 @@ public class PineTreeScript : MonoBehaviour, ITree
         return (Time.time - rabbitSpawnTime) > timeTillNextAnimal && !isRabbitSpawned;
     }
 
-	public void OnTriggerEnter(Collider collider)
+    bool ShouldSpawnFruit()
+    {
+        
+    }
+
+    public void OnCollisionEnter(Collision collider)
 	{
 		//seed hits the ground
 		if (collider.gameObject.GetComponent<TerrainScript>() != null)
 		{
-			//TODO do this better, more solid -> sometimes falls over
-			//TODO subscribe event to game manager that tree is planted
-			rigidBody.isKinematic = false;
-			GrowToNextStage();
+			rigidBody.isKinematic = true;
+
+            gameObject.transform.parent = treeCollection.gameObject.transform;
+
+            terrainUp = collider.gameObject.transform.up;
+
+			float randomY = Random.Range(0, 360);
+			float randomScale = Random.Range(0.6f, 1.0f);
+
+			treeScale = new Vector3(randomScale, randomScale, randomScale);
+            treeRotation = new Vector3(0, randomY, 0);
+
+            GrowToNextStage();
 		}
 	}
 }
