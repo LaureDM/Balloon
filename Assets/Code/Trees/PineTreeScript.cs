@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+﻿﻿using UnityEngine;
 using System.Collections;
 using AssemblyCSharp.Code.Enums;
 using AssemblyCSharp.Code.Trees;
@@ -20,7 +20,10 @@ public class PineTreeScript : MonoBehaviour, ITree
     private float timeTillNextAnimal;
 
     [SerializeField]
-    private GameObject[] fruitsSpawnPositions;
+    private float timeTillNextFruit;
+
+    [SerializeField]
+    private GameObject[] fruits;
 
     private TreeCollectionScript treeCollection;
 
@@ -30,6 +33,7 @@ public class PineTreeScript : MonoBehaviour, ITree
     private GrowState currentStage = GrowState.SEED;
     private float startTime;
     private float rabbitSpawnTime;
+    private float fruitSpawnTime;
 
     private Rigidbody rigidBody;
 
@@ -49,24 +53,24 @@ public class PineTreeScript : MonoBehaviour, ITree
         treeCollection = FindObjectOfType<TreeCollectionScript>();
     }
 
-    // Update is called once per frame
     void Update()
     {
-        //TODO maybe do with switch if it takes longer for each stage
+        //grow tree
         if (currentStage != GrowState.SEED && currentStage != GrowState.ADULT && IsReadyToGrow())
         {
             GrowToNextStage();
         }
+        //when adult, spawn animals
         else if (currentStage == GrowState.ADULT && ShouldSpawnRabbit())
         {
             isRabbitSpawned = true;
-            //TODO drop fruits?
             animalSpawner.SpawnAnimal(Animal.RABBIT);
             rabbitSpawnTime = Time.time;
         }
+        //when adult, drop fruits
         else if (currentStage == GrowState.ADULT && ShouldSpawnFruit())
         {
-            
+            TryToSpawnFruit();
         }
 
     }
@@ -131,7 +135,21 @@ public class PineTreeScript : MonoBehaviour, ITree
 
     bool ShouldSpawnFruit()
     {
-        
+        return (Time.time - fruitSpawnTime) > timeTillNextFruit;
+    }
+
+    void TryToSpawnFruit()
+    {
+        FruitSpawnPosition[] fruitSpawnPositions = currentStagePrefab.GetComponentsInChildren<FruitSpawnPosition>();
+
+        foreach (FruitSpawnPosition fruitSpawnPosition in fruitSpawnPositions)
+		{
+			if (!fruitSpawnPosition.IsFruitSpawned())
+			{
+                fruitSpawnPosition.SpawnFruit(FruitType.APPLE);
+                fruitSpawnTime = Time.time;
+			}
+		}
     }
 
     public void OnCollisionEnter(Collision collider)

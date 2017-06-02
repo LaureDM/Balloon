@@ -16,23 +16,45 @@ public class RabbitScript : MonoBehaviour {
     [SerializeField]
     private float durationWithoutTrees;
 
-    [SerializeField]
-    private Transform terrain;
+    private GameObject terrain;
 
     private Vector3 currentTarget;
 
     private float currentDuration;
 
+    private Rigidbody rigidBody;
+
+    private bool isResting;
+
+    private float minX;
+    private float minZ;
+
     void Start () 
     {
+		terrain = GameObject.FindWithTag("Terrain");
+
+		Bounds bounds = terrain.GetComponent<Collider>().bounds;
+
+		minX = bounds.size.x * 0.5f;
+		minZ = bounds.size.z * 0.5f;
+
 		FindNewTarget();
+
+        rigidBody = GetComponent<Rigidbody>();
     }
     
     void Update () {
 
-        if (Vector3.Distance(transform.position, currentTarget) > 0)
+        if (isResting)
         {
-            transform.position = Vector3.MoveTowards(transform.position, currentTarget, 10f * Time.deltaTime);
+            rigidBody.velocity = Vector3.zero;
+            rigidBody.angularVelocity = Vector3.zero;
+        }
+
+        if (Vector3.Distance(transform.position, currentTarget) > 1)
+        {
+            Vector3 dir = (currentTarget - transform.position).normalized * 10f;
+			rigidBody.velocity = dir;
 		}
         else
         {
@@ -49,19 +71,27 @@ public class RabbitScript : MonoBehaviour {
     void FindNewTarget()
     {
         //TODO random vector3 in bounds
-        //TODO 2 -> find fruit
+        //TODO 2 -> find fruit (if he is close to it) WithinRadius
         //TODO lock fruit the moment he founds it so others won't go after it
         //TODO if he has eaten fruit he drops a seed a while later
 
-        currentTarget = new Vector3(Random.Range(0, 50), transform.position.y, Random.Range(0, 50));
+        currentTarget = new Vector3(Random.Range(minX, -minX), transform.position.y, Random.Range(minZ, -minZ));
     }
 
     IEnumerator Rest()
     {
-        //TODO play rest animation and wait for it to end
-        yield return new WaitForSeconds(3);
-		FindNewTarget();
+        if (isResting)
+        {
+            yield break;
+        }
 
+        //TODO play rest animation and wait for it to end
+        isResting = true;
+
+        yield return new WaitForSeconds(3);
+
+		FindNewTarget();
+		isResting = false;
 	}
 
     bool CheckTreesOfInterest()
@@ -77,5 +107,14 @@ public class RabbitScript : MonoBehaviour {
         }
 
         return false;
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        //when rabbit bumps into tree, find a new target to walk to
+        if (collision.gameObject.GetComponent<PineTreeScript>())
+        {
+			FindNewTarget();
+		}
     }
 }

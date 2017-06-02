@@ -27,7 +27,9 @@ public class AnimalSpawnerScript : MonoBehaviour {
                 break;
         }
 
-		Instantiate(prefab, transform.position, transform.rotation);
+        GameObject animalObject = Instantiate(prefab, transform.position, transform.rotation) as GameObject;
+        animalObject.transform.parent = gameObject.transform;
+
         IncreaseAnimalCount(animal);
 	}
 
