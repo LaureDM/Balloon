@@ -23,7 +23,7 @@ public class RabbitScript : MonoBehaviour
 
     private float currentDuration;
 
-    private NavMeshAgent navMeshAgent;
+    private UnityEngine.AI.NavMeshAgent navMeshAgent;
 
     private bool isResting;
     private bool isEating;
@@ -42,7 +42,7 @@ public class RabbitScript : MonoBehaviour
         minX = bounds.size.x - 5f  * 0.5f;
         minZ = bounds.size.z - 5f * 0.5f;
 
-        navMeshAgent = GetComponent<NavMeshAgent>();
+        navMeshAgent = GetComponent<UnityEngine.AI.NavMeshAgent>();
 
         FindNewTarget();
     }
