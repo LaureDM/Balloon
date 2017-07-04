@@ -111,22 +111,42 @@ public class PineTreeScript : MonoBehaviour, ITree
         }
 
         startTime = Time.time;
-        ChangeStagePrefab(newStagePrefab);
+        StartCoroutine(ChangeTree(newStagePrefab));
     }
 
-    private void ChangeStagePrefab(GameObject newStagePrefab)
+    private IEnumerator ChangeTree(GameObject newStagePrefab)
     {
+        float normalizedScale = treeScale.normalized.magnitude;
+        float scaleSpeed = 6f;
+
+        while (normalizedScale > 0f)
+        {
+            normalizedScale -= Time.deltaTime * scaleSpeed;
+            currentStagePrefab.transform.localScale = new Vector3(normalizedScale, normalizedScale, normalizedScale);
+            yield return new WaitForEndOfFrame();
+        }
+
+        currentStagePrefab.transform.localScale = Vector3.zero;
+
         Destroy(currentStagePrefab.gameObject);
 
         GameObject treeStage = Instantiate(newStagePrefab, transform.position, transform.rotation) as GameObject;
-
-		currentStagePrefab = treeStage.transform;
+        
+        currentStagePrefab = treeStage.transform;
         currentStagePrefab.parent = gameObject.transform;
         currentStagePrefab.transform.up = terrainUp;
-
-        currentStagePrefab.localScale = treeScale;
         currentStagePrefab.transform.Rotate(treeRotation);
-	}
+
+        normalizedScale = 0f;
+        while (normalizedScale < treeScale.normalized.magnitude)
+        {
+            normalizedScale += Time.deltaTime * scaleSpeed;
+            currentStagePrefab.transform.localScale = new Vector3(normalizedScale, normalizedScale, normalizedScale);
+            yield return new WaitForEndOfFrame();
+        }
+
+        currentStagePrefab.transform.localScale = treeScale;
+    }
 
     bool ShouldSpawnRabbit()
     {
