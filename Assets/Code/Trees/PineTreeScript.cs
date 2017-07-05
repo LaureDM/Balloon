@@ -25,6 +25,12 @@ public class PineTreeScript : MonoBehaviour, ITree
     [SerializeField]
     private GameObject[] fruits;
 
+    [SerializeField]
+    private FruitSpawnPosition[] fruitSpawnPositions;
+
+    [SerializeField]
+    private GameObject seed;
+
     private TreeCollectionScript treeCollection;
 
     private AnimalSpawnerScript animalSpawner;
@@ -47,7 +53,7 @@ public class PineTreeScript : MonoBehaviour, ITree
 
     void Start()
     {
-        currentStagePrefab = transform.GetChild(0);
+        currentStagePrefab = seed.transform;
         rigidBody = GetComponent<Rigidbody>();
         animalSpawner = FindObjectOfType<AnimalSpawnerScript>();
         treeCollection = FindObjectOfType<TreeCollectionScript>();
@@ -160,8 +166,6 @@ public class PineTreeScript : MonoBehaviour, ITree
 
     void TryToSpawnFruit()
     {
-        FruitSpawnPosition[] fruitSpawnPositions = currentStagePrefab.GetComponentsInChildren<FruitSpawnPosition>();
-
         foreach (FruitSpawnPosition fruitSpawnPosition in fruitSpawnPositions)
 		{
 			if (!fruitSpawnPosition.IsFruitSpawned())
