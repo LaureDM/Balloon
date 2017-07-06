@@ -1,7 +1,7 @@
-﻿﻿﻿using System.Collections;
+﻿﻿using System.Collections;
 using UnityEngine;
 
-public class RabbitScript : MonoBehaviour
+public class RabbitScript : BaseAnimal
 {
 
     [SerializeField]
@@ -39,7 +39,7 @@ public class RabbitScript : MonoBehaviour
 
         Bounds bounds = terrain.GetComponent<Collider>().bounds;
 
-        minX = bounds.size.x - 5f  * 0.5f;
+        minX = bounds.size.x - 5f * 0.5f;
         minZ = bounds.size.z - 5f * 0.5f;
 
         navMeshAgent = GetComponent<UnityEngine.AI.NavMeshAgent>();
@@ -53,13 +53,13 @@ public class RabbitScript : MonoBehaviour
         {
             Debug.Log("Going towards target");
             navMeshAgent.SetDestination(currentTarget);
-		}
+        }
         else
         {
-			Debug.Log("target reached");
+            Debug.Log("target reached");
 
-			StartCoroutine(Rest());
-		}
+            StartCoroutine(Rest());
+        }
 
         //TODO find trees -> duration is restored
         //TODO find fruits -> when he eats fruit he drops seed a random time later
@@ -70,7 +70,7 @@ public class RabbitScript : MonoBehaviour
 
     private void FixedUpdate()
     {
-        
+
     }
 
     void FindNewTarget()
@@ -92,15 +92,23 @@ public class RabbitScript : MonoBehaviour
                 //TODO check if fruit is of interest
                 PineConeScript pineCone = fruit.GetComponent<PineConeScript>();
 
-                if (!pineCone.IsLocked)
-                {
-                    Debug.Log("Found fruit and locked it");
-                    pineCone.IsLocked = true;
-                    currentTarget = fruit.gameObject.transform.position;
-                    isGoingTowardsFood = true;
-					navMeshAgent.SetDestination(currentTarget);
-					return;
-                }
+                // Go towards the fruit, find a new target when it gets eaten
+                pineCone.target(FindNewTarget);
+
+                currentTarget = fruit.gameObject.transform.position;
+                isGoingTowardsFood = true;
+                navMeshAgent.SetDestination(currentTarget);
+                return;
+
+                // if (!pineCone.IsLocked)
+                // {
+                //     Debug.Log("Found fruit and locked it");
+                //     pineCone.IsLocked = true;
+                //     currentTarget = fruit.gameObject.transform.position;
+                //     isGoingTowardsFood = true;
+                // 	navMeshAgent.SetDestination(currentTarget);
+                // 	return;
+                // }
             }
         }
 
@@ -116,16 +124,16 @@ public class RabbitScript : MonoBehaviour
             yield break;
         }
 
-        Debug.Log("Rest"); 
+        Debug.Log("Rest");
 
         //TODO play rest animation and wait for it to end
         isResting = true;
 
         yield return new WaitForSeconds(3);
 
-		FindNewTarget();
-		isResting = false;
-	}
+        FindNewTarget();
+        isResting = false;
+    }
 
     IEnumerator EatFruit()
     {
@@ -162,18 +170,21 @@ public class RabbitScript : MonoBehaviour
         Debug.Log(collision.collider.gameObject);
 
         //if animal bumps into fruit he eats it 
-        if (collision.collider.gameObject.GetComponent<PineConeScript>())
+        PineConeScript pineCone = collision.collider.gameObject.GetComponent<PineConeScript>();
+        if (pineCone)
         {
-            //TODO unlock fruit
             //TODO check if fruit is
+
+            pineCone.unTarget(FindNewTarget);
+
             StartCoroutine(EatFruit());
             Debug.Log("Ate fruit");
             isGoingTowardsFood = false;
-            Destroy(collision.collider.gameObject);
+            Destroy(pineCone.gameObject);
         }
         else if (collision.collider.gameObject.GetComponent<PineTreeScript>())
         {
-			Rest();
-		}
+            Rest();
+        }
     }
 }
