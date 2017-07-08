@@ -154,6 +154,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4292327819582794}
   - component: {fileID: 119202339137909170}
+  - component: {fileID: 114055613487965390}
   m_Layer: 0
   m_Name: ShadowProjector
   m_TagString: Untagged
@@ -212,7 +213,7 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1735102919554016}
-  m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
+  m_LocalRotation: {x: 0.7071068, y: -0, z: -0, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
@@ -618,6 +619,17 @@ MonoBehaviour:
     type: 2}
   appleTreeSeedPrefab: {fileID: 1000013891793334, guid: 97d156d04cae74ef98e21be3b60264d5,
     type: 2}
+--- !u!114 &114055613487965390
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1735102919554016}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d39b7af8e077454a9453849c04e551c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!119 &119202339137909170
 Projector:
   m_ObjectHideFlags: 1
