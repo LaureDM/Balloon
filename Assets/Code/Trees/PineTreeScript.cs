@@ -125,10 +125,9 @@ public class PineTreeScript : MonoBehaviour, ITree
         float normalizedScale = treeScale.normalized.magnitude;
         float scaleSpeed = 6f;
 
-        while (normalizedScale > 0f)
+        for (float s = normalizedScale; s >= 0; s-=Time.deltaTime * scaleSpeed)
         {
-            normalizedScale -= Time.deltaTime * scaleSpeed;
-            currentStagePrefab.transform.localScale = new Vector3(normalizedScale, normalizedScale, normalizedScale);
+            currentStagePrefab.transform.localScale = new Vector3(s, s, s);
             yield return new WaitForEndOfFrame();
         }
 
@@ -143,11 +142,9 @@ public class PineTreeScript : MonoBehaviour, ITree
         currentStagePrefab.transform.up = terrainUp;
         currentStagePrefab.transform.Rotate(treeRotation);
 
-        normalizedScale = 0f;
-        while (normalizedScale < treeScale.normalized.magnitude)
+        for (float s = 0f; s < normalizedScale; s += Time.deltaTime * scaleSpeed)
         {
-            normalizedScale += Time.deltaTime * scaleSpeed;
-            currentStagePrefab.transform.localScale = new Vector3(normalizedScale, normalizedScale, normalizedScale);
+            currentStagePrefab.transform.localScale = new Vector3(s, s, s);
             yield return new WaitForEndOfFrame();
         }
 
