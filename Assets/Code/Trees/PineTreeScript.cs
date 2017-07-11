@@ -25,6 +25,9 @@ public class PineTreeScript : MonoBehaviour, ITree
     [SerializeField]
     private GameObject[] fruits;
 
+    [SerializeField]
+    private GameObject leavesParticlesPrefab;
+
     private TreeCollectionScript treeCollection;
 
     private AnimalSpawnerScript animalSpawner;
@@ -126,6 +129,9 @@ public class PineTreeScript : MonoBehaviour, ITree
 
         currentStagePrefab.localScale = treeScale;
         currentStagePrefab.transform.Rotate(treeRotation);
+
+        GameObject particles = Instantiate(leavesParticlesPrefab, transform.position, transform.rotation) as GameObject;
+        Destroy(particles, particles.GetComponentInChildren<ParticleSystem>().main.duration);
 	}
 
     bool ShouldSpawnRabbit()
