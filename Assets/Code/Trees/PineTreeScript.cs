@@ -25,6 +25,12 @@ public class PineTreeScript : MonoBehaviour, ITree
     [SerializeField]
     private GameObject[] fruits;
 
+    [SerializeField]
+    private FruitSpawnPosition[] fruitSpawnPositions;
+
+    [SerializeField]
+    private GameObject seed;
+
     private TreeCollectionScript treeCollection;
 
     private AnimalSpawnerScript animalSpawner;
@@ -47,7 +53,7 @@ public class PineTreeScript : MonoBehaviour, ITree
 
     void Start()
     {
-        currentStagePrefab = transform.GetChild(0);
+        currentStagePrefab = seed.transform;
         rigidBody = GetComponent<Rigidbody>();
         animalSpawner = FindObjectOfType<AnimalSpawnerScript>();
         treeCollection = FindObjectOfType<TreeCollectionScript>();
@@ -111,22 +117,39 @@ public class PineTreeScript : MonoBehaviour, ITree
         }
 
         startTime = Time.time;
-        ChangeStagePrefab(newStagePrefab);
+        StartCoroutine(ChangeTree(newStagePrefab));
     }
 
-    private void ChangeStagePrefab(GameObject newStagePrefab)
+    private IEnumerator ChangeTree(GameObject newStagePrefab)
     {
+        float normalizedScale = treeScale.normalized.magnitude;
+        float scaleSpeed = 6f;
+
+        for (float s = normalizedScale; s >= 0; s-=Time.deltaTime * scaleSpeed)
+        {
+            currentStagePrefab.transform.localScale = new Vector3(s, s, s);
+            yield return new WaitForEndOfFrame();
+        }
+
+        currentStagePrefab.transform.localScale = Vector3.zero;
+
         Destroy(currentStagePrefab.gameObject);
 
         GameObject treeStage = Instantiate(newStagePrefab, transform.position, transform.rotation) as GameObject;
-
-		currentStagePrefab = treeStage.transform;
+        
+        currentStagePrefab = treeStage.transform;
         currentStagePrefab.parent = gameObject.transform;
         currentStagePrefab.transform.up = terrainUp;
-
-        currentStagePrefab.localScale = treeScale;
         currentStagePrefab.transform.Rotate(treeRotation);
-	}
+
+        for (float s = 0f; s < normalizedScale; s += Time.deltaTime * scaleSpeed)
+        {
+            currentStagePrefab.transform.localScale = new Vector3(s, s, s);
+            yield return new WaitForEndOfFrame();
+        }
+
+        currentStagePrefab.transform.localScale = treeScale;
+    }
 
     bool ShouldSpawnRabbit()
     {
@@ -140,8 +163,6 @@ public class PineTreeScript : MonoBehaviour, ITree
 
     void TryToSpawnFruit()
     {
-        FruitSpawnPosition[] fruitSpawnPositions = currentStagePrefab.GetComponentsInChildren<FruitSpawnPosition>();
-
         foreach (FruitSpawnPosition fruitSpawnPosition in fruitSpawnPositions)
 		{
 			if (!fruitSpawnPosition.IsFruitSpawned())
