@@ -4,15 +4,15 @@ using UnityEngine;
 
 public class LockRotation : MonoBehaviour {
 
-	private Quaternion _rotation;
+	private Quaternion rotation;
 
 	// Use this for initialization
 	void Start () {
-		_rotation = transform.rotation;
+		rotation = transform.rotation;
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		transform.rotation = _rotation;
+		transform.rotation = rotation;
 	}
 }
