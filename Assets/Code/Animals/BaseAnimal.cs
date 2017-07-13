@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-public class BaseAnimal : MonoBehaviour
+public abstract class BaseAnimal : MonoBehaviour
 {
+    public abstract void TargetLost();
 }

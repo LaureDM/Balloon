@@ -5,30 +5,40 @@ using UnityEngine.Events;
 
 public class Fruit : MonoBehaviour
 {
-    public List<UnityAction> approachingAnimals;
+    public List<BaseAnimal> approachingAnimals;
 
     // public bool IsLocked { get; set; }
 
     void Awake()
     {
-        approachingAnimals = new List<UnityAction>();
+        approachingAnimals = new List<BaseAnimal>();
     }
 
-    public void target(UnityAction unityEvent)
+    public void target(BaseAnimal animal)
     {
-        approachingAnimals.Add(unityEvent);
+        Debug.Log("Rabbit added to incoming");
+        approachingAnimals.Add(animal);
     }
 
-    public void unTarget(UnityAction unityEvent)
+    public void unTarget(BaseAnimal animal)
     {
-        approachingAnimals.Remove(unityEvent);
+        // TODO animal doesn't always change target?
+        // TODO make animale rest first before picking new target?
+
+        Debug.Log("Removing rabbit from incoming");
+
+        approachingAnimals.Remove(animal);
     }
 
-    void onDestroy()
+    void OnDestroy()
     {
-        foreach(UnityAction action in approachingAnimals)
+        Debug.Log("fruit destroyed");
+
+        Debug.Log("Notifying: " + approachingAnimals.Count + " animals");
+        foreach (BaseAnimal animal in approachingAnimals)
         {
-            action.Invoke();
+            Debug.Log("Notified animal");
+            animal.TargetLost();
         }
     }
 }

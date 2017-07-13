@@ -53,6 +53,8 @@ public class RabbitScript : BaseAnimal
         {
             Debug.Log("Going towards target");
             navMeshAgent.SetDestination(currentTarget);
+
+            Debug.DrawRay(transform.position, navMeshAgent.destination - transform.position, Color.green);
         }
         else
         {
@@ -87,34 +89,32 @@ public class RabbitScript : BaseAnimal
         {
             if (fruit.gameObject.GetComponent<PineConeScript>())
             {
-                Debug.Log("Found fruit");
-
                 //TODO check if fruit is of interest
                 PineConeScript pineCone = fruit.GetComponent<PineConeScript>();
 
                 // Go towards the fruit, find a new target when it gets eaten
-                pineCone.target(FindNewTarget);
+                pineCone.target(this);
 
                 currentTarget = fruit.gameObject.transform.position;
                 isGoingTowardsFood = true;
                 navMeshAgent.SetDestination(currentTarget);
-                return;
 
-                // if (!pineCone.IsLocked)
-                // {
-                //     Debug.Log("Found fruit and locked it");
-                //     pineCone.IsLocked = true;
-                //     currentTarget = fruit.gameObject.transform.position;
-                //     isGoingTowardsFood = true;
-                // 	navMeshAgent.SetDestination(currentTarget);
-                // 	return;
-                // }
+                Debug.Log("Found fruit target: " + currentTarget);
+
+                return;
             }
         }
 
         currentTarget = new Vector3(Random.Range(minX, -minX), transform.position.y, Random.Range(minZ, -minZ));
 
+        Debug.Log("Found other target: " + currentTarget);
+
         navMeshAgent.SetDestination(currentTarget);
+    }
+
+    public override void TargetLost()
+    {
+        FindNewTarget();
     }
 
     IEnumerator Rest()
@@ -175,7 +175,7 @@ public class RabbitScript : BaseAnimal
         {
             //TODO check if fruit is
 
-            pineCone.unTarget(FindNewTarget);
+            pineCone.unTarget(this);
 
             StartCoroutine(EatFruit());
             Debug.Log("Ate fruit");
