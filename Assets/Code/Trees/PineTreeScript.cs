@@ -6,6 +6,7 @@ using AssemblyCSharp.Code.Controllers;
 
 public class PineTreeScript : MonoBehaviour, ITree
 {
+    private const float PARTICLE_DURATION = 4.0f;
 
     [SerializeField]
     private GameObject[] growStages;
@@ -130,9 +131,14 @@ public class PineTreeScript : MonoBehaviour, ITree
         currentStagePrefab.localScale = treeScale;
         currentStagePrefab.transform.Rotate(treeRotation);
 
-        GameObject particles = Instantiate(leavesParticlesPrefab, transform.position, transform.rotation) as GameObject;
-        Destroy(particles, particles.GetComponentInChildren<ParticleSystem>().main.duration);
-	}
+        float particleHeight = (transform.position.y + currentStagePrefab.GetComponentInChildren<Collider>().bounds.size.y)/2;
+        Vector3 particlesPosition = new Vector3(transform.position.x, particleHeight, transform.position.z);
+
+        GameObject particlesParent = Instantiate(leavesParticlesPrefab, particlesPosition, transform.rotation) as GameObject;
+        ParticleSystem particles = particlesParent.GetComponentInChildren<ParticleSystem>();
+        ParticleSystem particlesSubEmitter = particles.GetComponentInChildren<ParticleSystem>();
+        Destroy(particlesParent, PARTICLE_DURATION);
+    }
 
     bool ShouldSpawnRabbit()
     {
