@@ -223,6 +223,8 @@ MonoBehaviour:
   fruitSpawnPositions:
   - {fileID: 114184087366120582}
   seed: {fileID: 1000011318516594}
+  leavesParticlesPrefab: {fileID: 1163563870711770, guid: 803442ffd14f863478f4d366cfd614c7,
+    type: 2}
 --- !u!114 &114184087366120582
 MonoBehaviour:
   m_ObjectHideFlags: 1
