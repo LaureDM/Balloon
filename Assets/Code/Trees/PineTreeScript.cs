@@ -53,7 +53,6 @@ public class PineTreeScript : MonoBehaviour, ITree
     private Vector3 terrainUp;
 
     private Vector3 treeScale;
-    private Vector3 treeRotation;
 
     void Start()
     {
@@ -144,7 +143,6 @@ public class PineTreeScript : MonoBehaviour, ITree
         currentStagePrefab = treeStage.transform;
         currentStagePrefab.parent = gameObject.transform;
         currentStagePrefab.transform.up = terrainUp;
-        currentStagePrefab.transform.Rotate(treeRotation);
 
         for (float s = 0f; s < normalizedScale; s += Time.deltaTime * scaleSpeed)
         {
@@ -200,7 +198,9 @@ public class PineTreeScript : MonoBehaviour, ITree
 			float randomScale = Random.Range(0.6f, 1.0f);
 
 			treeScale = new Vector3(randomScale, randomScale, randomScale);
-            treeRotation = new Vector3(0, randomY, 0);
+
+            Vector3 treeRotation = new Vector3(0, randomY, 0);
+            gameObject.transform.Rotate(treeRotation);
 
             GrowToNextStage();
 		}
