@@ -3,35 +3,50 @@ using UnityEngine;
 
 public class RabbitScript : MonoBehaviour
 {
+    #region Editor Fields
 
+    /*
+     * The fruits this animal can eat
+     */
     [SerializeField]
     private GameObject[] fruits;
 
+
+    /*
+     * The tags of the trees the animal is attracted by
+     */
     [SerializeField]
     private string[] treeTags;
 
+    /*
+     * The seeds the animal can drop
+     */
     [SerializeField]
     private GameObject[] seeds;
-
-    //this indicates how many seconds they can survive without trees
+    
+    /*
+     * Indicates how long an animal can survive without trees
+     */
     [SerializeField]
     private float durationWithoutTrees;
 
+    #endregion
+
+    #region Fields
+
     private GameObject terrain;
-
     private Vector3 currentTarget;
-
-    private float currentDuration;
-
     private UnityEngine.AI.NavMeshAgent navMeshAgent;
 
     private bool isResting;
     private bool isEating;
-
-    private float minX;
-    private float minZ;
-
     private bool isGoingTowardsFood;
+
+    private float terrainTargetBoundX;
+    private float terrainTargetBoundZ;
+    #endregion
+
+    #region Initialization
 
     void Start()
     {
@@ -39,13 +54,17 @@ public class RabbitScript : MonoBehaviour
 
         Bounds bounds = terrain.GetComponent<Collider>().bounds;
 
-        minX = bounds.size.x - 5f  * 0.5f;
-        minZ = bounds.size.z - 5f * 0.5f;
+        terrainTargetBoundX = bounds.size.x - 5f  * 0.5f;
+        terrainTargetBoundZ = bounds.size.z - 5f * 0.5f;
 
         navMeshAgent = GetComponent<UnityEngine.AI.NavMeshAgent>();
 
         FindNewTarget();
     }
+
+    #endregion
+
+    #region Unity Methods
 
     void Update()
     {
@@ -68,9 +87,43 @@ public class RabbitScript : MonoBehaviour
         //TODO if 0, animal dies
     }
 
-    private void FixedUpdate()
+    private void OnCollisionEnter(Collision collision)
     {
-        
+        Debug.Log(collision.collider.gameObject);
+
+        //if animal bumps into fruit he eats it 
+        if (collision.collider.gameObject.GetComponent<PineConeScript>())
+        {
+            //TODO unlock fruit
+            //TODO check if fruit is
+            StartCoroutine(EatFruit());
+            Debug.Log("Ate fruit");
+            isGoingTowardsFood = false;
+            Destroy(collision.collider.gameObject);
+        }
+        else if (collision.collider.gameObject.GetComponent<PineTreeScript>())
+        {
+            Rest();
+        }
+    }
+
+    #endregion
+
+    #region Helper Methods
+
+    bool CheckTreesOfInterest()
+    {
+        foreach (string treeTag in treeTags)
+        {
+            GameObject tree = GameObject.FindWithTag(treeTag);
+
+            if (tree != null)
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     void FindNewTarget()
@@ -104,10 +157,14 @@ public class RabbitScript : MonoBehaviour
             }
         }
 
-        currentTarget = new Vector3(Random.Range(minX, -minX), transform.position.y, Random.Range(minZ, -minZ));
+        currentTarget = new Vector3(Random.Range(terrainTargetBoundX, -terrainTargetBoundX), transform.position.y, Random.Range(terrainTargetBoundZ, -terrainTargetBoundZ));
 
         navMeshAgent.SetDestination(currentTarget);
     }
+
+    #endregion
+
+    #region Coroutines
 
     IEnumerator Rest()
     {
@@ -142,38 +199,5 @@ public class RabbitScript : MonoBehaviour
         isEating = false;
     }
 
-    bool CheckTreesOfInterest()
-    {
-        foreach (string treeTag in treeTags)
-        {
-            GameObject tree = GameObject.FindWithTag(treeTag);
-
-            if (tree != null)
-            {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    private void OnCollisionEnter(Collision collision)
-    {
-        Debug.Log(collision.collider.gameObject);
-
-        //if animal bumps into fruit he eats it 
-        if (collision.collider.gameObject.GetComponent<PineConeScript>())
-        {
-            //TODO unlock fruit
-            //TODO check if fruit is
-            StartCoroutine(EatFruit());
-            Debug.Log("Ate fruit");
-            isGoingTowardsFood = false;
-            Destroy(collision.collider.gameObject);
-        }
-        else if (collision.collider.gameObject.GetComponent<PineTreeScript>())
-        {
-			Rest();
-		}
-    }
+    #endregion
 }

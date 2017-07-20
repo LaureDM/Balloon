@@ -3,18 +3,34 @@ using System.Collections;
 using AssemblyCSharp.Code.Enums;
 using System.Collections.Generic;
 
-public class AnimalSpawnerScript : MonoBehaviour {
+public class AnimalCollectionScript : MonoBehaviour {
+
+    #region Editor Fields
 
     [SerializeField]
     private GameObject rabbitPrefab;
 
-    //discovered animals with their count in the forest
+    #endregion
+
+    #region Fields
+
+    /*
+     *  discovered animals with their count in the forest
+     */
     private Dictionary<Animal, int> animalDictionary;
 
-	// Use this for initialization
-	void Start () {
+    #endregion
+
+    #region Initialization
+
+    void Start ()
+    {
         animalDictionary = new Dictionary<Animal, int>();
 	}
+
+    #endregion
+
+    #region Helper Methods
 
     public void SpawnAnimal(Animal animal)
     {
@@ -56,4 +72,7 @@ public class AnimalSpawnerScript : MonoBehaviour {
 		}
     }
     */
+
+    #endregion
+
 }

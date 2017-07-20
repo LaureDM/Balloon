@@ -5,28 +5,30 @@ using System.Collections.Generic;
 [RequireComponent(typeof(Rigidbody))]
 public class BalloonController : MonoBehaviour {
 
-	public static string IS_MOVING = "IsMoving";
+    #region Editor Fields
 
-	[SerializeField]
+    [SerializeField]
 	private float speed;
 
 	[SerializeField]
 	private float tilt;
 
 	[SerializeField]
-	private Camera balloonCamera;
+	private SeedCollectionScript seedDropper;
 
-	[SerializeField]
-	private GameObject floor;
+    #endregion
 
-	[SerializeField]
-	private SeedDropperScript seedDropper;
+    #region Fields
 
-	public Animator balloonAnimator;
+    public Animator balloonAnimator;
 
 	private List<TreeType> seeds;
 
-	void Start()
+    #endregion
+
+    #region Initialization
+
+    void Start()
 	{
 		seeds = new List<TreeType> ();
 
@@ -38,14 +40,18 @@ public class BalloonController : MonoBehaviour {
 		seeds.Add (TreeType.PINE_TREE);
 	}
 
-	void Update () {
+    #endregion
+
+    #region Unity Methods
+
+    void Update () {
 		
 		#if UNITY_EDITOR
 
-		float movementHorizontal = Input.GetAxis("Horizontal");
-		float movementVertical = Input.GetAxis("Vertical");
+		float movementHorizontal = Input.GetAxis(InputValues.HORIZONTAL);
+		float movementVertical = Input.GetAxis(InputValues.VERTICAL);
 
-		balloonAnimator.SetBool(IS_MOVING, (movementHorizontal != 0 || movementVertical != 0));
+		balloonAnimator.SetBool(AnimatorParameters.IS_MOVING, (movementHorizontal != 0 || movementVertical != 0));
         			
 		Vector3 movement = new Vector3(movementHorizontal, 0.0f, movementVertical);
 
@@ -53,7 +59,7 @@ public class BalloonController : MonoBehaviour {
 
 		GetComponent<Rigidbody>().rotation = Quaternion.Euler (GetComponent<Rigidbody>().velocity.z * tilt, 0.0f, GetComponent<Rigidbody>().velocity.x * -tilt);
 
-		if (Input.GetButtonDown("Jump"))
+		if (Input.GetButtonDown(InputValues.JUMP))
 		{
 			seeds.Remove(TreeType.PINE_TREE);
 			seedDropper.InstantiateSeed(TreeType.PINE_TREE);
@@ -77,7 +83,9 @@ public class BalloonController : MonoBehaviour {
 		#endif
 	}
 
-	/*
+    #endregion
+
+    /*
 	void OnDrawGizmosSelected() {
 		Camera camera = GetComponent<Camera>();
 		Vector3 p = camera.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 10f));
@@ -98,5 +106,5 @@ public class BalloonController : MonoBehaviour {
 		}
 	}
 	*/
-		
+
 }

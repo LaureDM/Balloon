@@ -6,7 +6,13 @@ using AssemblyCSharp.Code.Controllers;
 
 public class PineTreeScript : MonoBehaviour, ITree
 {
+    #region Constants
+
     private const float PARTICLE_DURATION = 4.0f;
+
+    #endregion
+
+    #region Editor Fields
 
     [SerializeField]
     private GameObject[] growStages;
@@ -35,9 +41,13 @@ public class PineTreeScript : MonoBehaviour, ITree
     [SerializeField]
     private GameObject leavesParticlesPrefab;
 
+    #endregion
+
+    #region Fields
+
     private TreeCollectionScript treeCollection;
 
-    private AnimalSpawnerScript animalSpawner;
+    private AnimalCollectionScript animalSpawner;
 
     private Transform currentStagePrefab;
     private GrowState currentStage = GrowState.SEED;
@@ -54,13 +64,21 @@ public class PineTreeScript : MonoBehaviour, ITree
 
     private Vector3 treeScale;
 
+    #endregion
+
+    #region Initialization
+
     void Start()
     {
         currentStagePrefab = seed.transform;
         rigidBody = GetComponent<Rigidbody>();
-        animalSpawner = FindObjectOfType<AnimalSpawnerScript>();
+        animalSpawner = FindObjectOfType<AnimalCollectionScript>();
         treeCollection = FindObjectOfType<TreeCollectionScript>();
     }
+
+    #endregion
+
+    #region Unity Methods
 
     void Update()
     {
@@ -83,6 +101,33 @@ public class PineTreeScript : MonoBehaviour, ITree
         }
 
     }
+
+    public void OnCollisionEnter(Collision collider)
+    {
+        //seed hits the ground
+        if (collider.gameObject.GetComponent<TerrainScript>() != null)
+        {
+            rigidBody.isKinematic = true;
+
+            gameObject.transform.parent = treeCollection.gameObject.transform;
+
+            terrainUp = collider.gameObject.transform.up;
+
+            float randomY = Random.Range(0, 360);
+            float randomScale = Random.Range(0.6f, 1.0f);
+
+            treeScale = new Vector3(randomScale, randomScale, randomScale);
+
+            Vector3 treeRotation = new Vector3(0, randomY, 0);
+            gameObject.transform.Rotate(treeRotation);
+
+            GrowToNextStage();
+        }
+    }
+
+    #endregion
+
+    #region Helper Methods
 
     private bool IsReadyToGrow()
     {
@@ -123,6 +168,32 @@ public class PineTreeScript : MonoBehaviour, ITree
         StartCoroutine(ChangeTree(newStagePrefab));
     }
 
+    private bool ShouldSpawnRabbit()
+    {
+        return (Time.time - rabbitSpawnTime) > timeTillNextAnimal && !isRabbitSpawned;
+    }
+
+    private bool ShouldSpawnFruit()
+    {
+        return (Time.time - fruitSpawnTime) > timeTillNextFruit;
+    }
+
+    void TryToSpawnFruit()
+    {
+        foreach (FruitSpawnPosition fruitSpawnPosition in fruitSpawnPositions)
+        {
+            if (!fruitSpawnPosition.IsFruitSpawned())
+            {
+                fruitSpawnPosition.SpawnFruit(FruitType.APPLE);
+                fruitSpawnTime = Time.time;
+            }
+        }
+    }
+
+    #endregion
+
+    #region Coroutines
+
     private IEnumerator ChangeTree(GameObject newStagePrefab)
     {
         float normalizedScale = treeScale.normalized.magnitude;
@@ -161,48 +232,5 @@ public class PineTreeScript : MonoBehaviour, ITree
         Destroy(particlesParent, PARTICLE_DURATION);
     }
 
-    bool ShouldSpawnRabbit()
-    {
-        return (Time.time - rabbitSpawnTime) > timeTillNextAnimal && !isRabbitSpawned;
-    }
-
-    bool ShouldSpawnFruit()
-    {
-        return (Time.time - fruitSpawnTime) > timeTillNextFruit;
-    }
-
-    void TryToSpawnFruit()
-    {
-        foreach (FruitSpawnPosition fruitSpawnPosition in fruitSpawnPositions)
-		{
-			if (!fruitSpawnPosition.IsFruitSpawned())
-			{
-                fruitSpawnPosition.SpawnFruit(FruitType.APPLE);
-                fruitSpawnTime = Time.time;
-			}
-		}
-    }
-
-    public void OnCollisionEnter(Collision collider)
-	{
-		//seed hits the ground
-		if (collider.gameObject.GetComponent<TerrainScript>() != null)
-		{
-			rigidBody.isKinematic = true;
-
-            gameObject.transform.parent = treeCollection.gameObject.transform;
-
-            terrainUp = collider.gameObject.transform.up;
-
-			float randomY = Random.Range(0, 360);
-			float randomScale = Random.Range(0.6f, 1.0f);
-
-			treeScale = new Vector3(randomScale, randomScale, randomScale);
-
-            Vector3 treeRotation = new Vector3(0, randomY, 0);
-            gameObject.transform.Rotate(treeRotation);
-
-            GrowToNextStage();
-		}
-	}
+    #endregion
 }
