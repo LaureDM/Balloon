@@ -1,8 +1,10 @@
 ﻿using UnityEngine;
 
-public class SeedDropperScript : MonoBehaviour {
+public class SeedCollectionScript : MonoBehaviour {
 
-	[SerializeField]
+    #region Editor Fields
+
+    [SerializeField]
 	private GameObject pineTreeSeedPrefab;
 
 	[SerializeField]
@@ -11,9 +13,11 @@ public class SeedDropperScript : MonoBehaviour {
 	[SerializeField]
 	private GameObject appleTreeSeedPrefab;
 
-	private SeedDropperScript Instance;
+    #endregion
 
-	public void InstantiateSeed(TreeType treeType)
+    #region Helper Methods
+
+    public void InstantiateSeed(TreeType treeType)
 	{
 		GameObject prefab = null;
 
@@ -34,4 +38,6 @@ public class SeedDropperScript : MonoBehaviour {
 
 		Instantiate (prefab, gameObject.transform.position, gameObject.transform.rotation);
 	}
+
+    #endregion
 }

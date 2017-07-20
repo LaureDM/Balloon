@@ -5,11 +5,17 @@ namespace AssemblyCSharp.Code.Controllers
 {
     public class FruitSpawnPosition : MonoBehaviour
     {
-		[SerializeField]
+        #region Editor Fields
+
+        [SerializeField]
 		private GameObject pineconePrefab;
 
 		[SerializeField]
 		private GameObject applePrefab;
+
+        #endregion
+
+        #region Helper Methods
 
         public void SpawnFruit(FruitType fruitType)
         {
@@ -34,5 +40,7 @@ namespace AssemblyCSharp.Code.Controllers
         {
             return transform.childCount > 0;
         }
+
+        #endregion
     }
 }
