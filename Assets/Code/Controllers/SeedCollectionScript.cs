@@ -15,6 +15,8 @@ public class SeedCollectionScript : MonoBehaviour {
 
     #endregion
 
+    #region Helper Methods
+
     public void InstantiateSeed(TreeType treeType)
 	{
 		GameObject prefab = null;
@@ -36,4 +38,6 @@ public class SeedCollectionScript : MonoBehaviour {
 
 		Instantiate (prefab, gameObject.transform.position, gameObject.transform.rotation);
 	}
+
+    #endregion
 }
