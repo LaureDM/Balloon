@@ -30,6 +30,12 @@ public class RabbitScript : MonoBehaviour
     [SerializeField]
     private float durationWithoutTrees;
 
+    [SerializeField]
+    private SeedDropperScript seedDropper;
+
+    [SerializeField]
+    private float timeTillSeedDrops;
+
     #endregion
 
     #region Fields
@@ -44,6 +50,11 @@ public class RabbitScript : MonoBehaviour
 
     private float terrainTargetBoundX;
     private float terrainTargetBoundZ;
+
+    private bool ateFruit;
+
+    private float currentTimeTillSeedDrops;
+
     #endregion
 
     #region Initialization
@@ -54,10 +65,12 @@ public class RabbitScript : MonoBehaviour
 
         Bounds bounds = terrain.GetComponent<Collider>().bounds;
 
-        terrainTargetBoundX = bounds.size.x - 5f  * 0.5f;
-        terrainTargetBoundZ = bounds.size.z - 5f * 0.5f;
+        terrainTargetBoundX = (bounds.size.x - 5f)/2;
+        terrainTargetBoundZ = (bounds.size.z - 5f)/2;
 
         navMeshAgent = GetComponent<UnityEngine.AI.NavMeshAgent>();
+
+        currentTimeTillSeedDrops = timeTillSeedDrops;
 
         FindNewTarget();
     }
@@ -68,15 +81,24 @@ public class RabbitScript : MonoBehaviour
 
     void Update()
     {
+        if (currentTimeTillSeedDrops <= 0)
+        {
+            ateFruit = false;
+            currentTimeTillSeedDrops = timeTillSeedDrops;
+            seedDropper.InstantiateSeed(TreeType.PINE_TREE, false);
+        }
+
+        if (ateFruit)
+        {
+            currentTimeTillSeedDrops -= Time.deltaTime;
+        }
+
         if (Vector3.Distance(transform.position, navMeshAgent.destination) > 1.0f || isGoingTowardsFood)
         {
-            Debug.Log("Going towards target");
             navMeshAgent.SetDestination(currentTarget);
 		}
         else
         {
-			Debug.Log("target reached");
-
 			StartCoroutine(Rest());
 		}
 
@@ -91,19 +113,22 @@ public class RabbitScript : MonoBehaviour
     {
         Debug.Log(collision.collider.gameObject);
 
+        GameObject bumpedObject = collision.collider.gameObject;
+        Transform parent = bumpedObject.transform.parent;
+
         //if animal bumps into fruit he eats it 
-        if (collision.collider.gameObject.GetComponent<PineConeScript>())
+        if (parent != null && parent.gameObject.GetComponent<PineConeScript>())
         {
             //TODO unlock fruit
             //TODO check if fruit is
+            ateFruit = true;
             StartCoroutine(EatFruit());
-            Debug.Log("Ate fruit");
             isGoingTowardsFood = false;
-            Destroy(collision.collider.gameObject);
+            Destroy(parent.gameObject);
         }
-        else if (collision.collider.gameObject.GetComponent<PineTreeScript>())
+        else
         {
-            Rest();
+            StartCoroutine(Rest());
         }
     }
 
@@ -131,25 +156,28 @@ public class RabbitScript : MonoBehaviour
         //TODO 2 -> find fruit (if he is close to it) WithinRadius
         //TODO lock fruit the moment he finds it so others won't go after it
         //TODO if he has eaten fruit he drops a seed a while later
-
-        Debug.Log("Find new target!");
+        //No need to look for a fruit target if he just ate one
+        if (ateFruit)
+        {
+            currentTarget = new Vector3(Random.Range(terrainTargetBoundX, -terrainTargetBoundX), transform.position.y, Random.Range(terrainTargetBoundZ, -terrainTargetBoundZ));
+            navMeshAgent.SetDestination(currentTarget);
+            return;
+        }
 
         Collider[] hitColliders = Physics.OverlapSphere(transform.position, 30f);
 
         foreach (Collider fruit in hitColliders)
         {
-            if (fruit.gameObject.GetComponent<PineConeScript>())
+            Transform parent = fruit.transform.parent;
+            if (parent != null && parent.gameObject.GetComponent<PineConeScript>())
             {
-                Debug.Log("Found fruit");
-
                 //TODO check if fruit is of interest
-                PineConeScript pineCone = fruit.GetComponent<PineConeScript>();
+                PineConeScript pineCone = parent.GetComponent<PineConeScript>();
 
                 if (!pineCone.IsLocked)
                 {
-                    Debug.Log("Found fruit and locked it");
                     pineCone.IsLocked = true;
-                    currentTarget = fruit.gameObject.transform.position;
+                    currentTarget = parent.transform.position;
                     isGoingTowardsFood = true;
 					navMeshAgent.SetDestination(currentTarget);
 					return;
@@ -158,7 +186,6 @@ public class RabbitScript : MonoBehaviour
         }
 
         currentTarget = new Vector3(Random.Range(terrainTargetBoundX, -terrainTargetBoundX), transform.position.y, Random.Range(terrainTargetBoundZ, -terrainTargetBoundZ));
-
         navMeshAgent.SetDestination(currentTarget);
     }
 
@@ -172,8 +199,6 @@ public class RabbitScript : MonoBehaviour
         {
             yield break;
         }
-
-        Debug.Log("Rest"); 
 
         //TODO play rest animation and wait for it to end
         isResting = true;

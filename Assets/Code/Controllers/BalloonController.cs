@@ -14,7 +14,7 @@ public class BalloonController : MonoBehaviour {
 	private float tilt;
 
 	[SerializeField]
-	private SeedCollectionScript seedDropper;
+	private SeedDropperScript seedDropper;
 
     #endregion
 
@@ -62,7 +62,7 @@ public class BalloonController : MonoBehaviour {
 		if (Input.GetButtonDown(InputValues.JUMP))
 		{
 			seeds.Remove(TreeType.PINE_TREE);
-			seedDropper.InstantiateSeed(TreeType.PINE_TREE);
+			seedDropper.InstantiateSeed(TreeType.PINE_TREE, true);
 		}
 
         # else

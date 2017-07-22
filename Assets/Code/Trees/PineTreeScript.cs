@@ -8,7 +8,7 @@ public class PineTreeScript : MonoBehaviour, ITree
 {
     #region Constants
 
-    private const float PARTICLE_DURATION = 4.0f;
+    private const float PARTICLE_DURATION = 3.0f;
 
     #endregion
 
@@ -40,6 +40,12 @@ public class PineTreeScript : MonoBehaviour, ITree
 
     [SerializeField]
     private GameObject leavesParticlesPrefab;
+
+    #endregion
+
+    #region Properties
+
+    public bool IsCollectable { get; set; }
 
     #endregion
 
@@ -105,7 +111,7 @@ public class PineTreeScript : MonoBehaviour, ITree
     public void OnCollisionEnter(Collision collider)
     {
         //seed hits the ground
-        if (collider.gameObject.GetComponent<TerrainScript>() != null)
+        if (collider.gameObject.GetComponent<TerrainScript>() != null && !IsCollectable)
         {
             rigidBody.isKinematic = true;
 
@@ -226,10 +232,8 @@ public class PineTreeScript : MonoBehaviour, ITree
         float particleHeight = (transform.position.y + currentStagePrefab.GetComponentInChildren<Collider>().bounds.size.y)/2;
         Vector3 particlesPosition = new Vector3(transform.position.x, particleHeight, transform.position.z);
 
-        GameObject particlesParent = Instantiate(leavesParticlesPrefab, particlesPosition, transform.rotation) as GameObject;
-        ParticleSystem particles = particlesParent.GetComponentInChildren<ParticleSystem>();
-        ParticleSystem particlesSubEmitter = particles.GetComponentInChildren<ParticleSystem>();
-        Destroy(particlesParent, PARTICLE_DURATION);
+        GameObject particles = Instantiate(leavesParticlesPrefab, particlesPosition, transform.rotation) as GameObject;
+        Destroy(particles, PARTICLE_DURATION);
     }
 
     #endregion

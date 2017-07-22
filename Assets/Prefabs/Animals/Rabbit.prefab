@@ -47,6 +47,22 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!1 &1867109136887444
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 4686779513019724}
+  - component: {fileID: 114660816435031910}
+  m_Layer: 0
+  m_Name: SeedDropper
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
 --- !u!4 &4000013022017786
 Transform:
   m_ObjectHideFlags: 1
@@ -58,6 +74,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4000013550551618}
+  - {fileID: 4686779513019724}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -68,11 +85,24 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1000012968870060}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.9, z: 0}
+  m_LocalPosition: {x: 0, y: 1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4000013022017786}
   m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &4686779513019724
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1867109136887444}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: -1.35}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4000013022017786}
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!23 &23000010094548624
 MeshRenderer:
@@ -144,6 +174,25 @@ MonoBehaviour:
   - PineTree
   seeds: []
   durationWithoutTrees: 30
+  seedDropper: {fileID: 114660816435031910}
+  timeTillSeedDrops: 10
+--- !u!114 &114660816435031910
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1867109136887444}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 71bad25c19caf44b29e06775519a0e62, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pineTreeSeedPrefab: {fileID: 1000013891793334, guid: 97d156d04cae74ef98e21be3b60264d5,
+    type: 2}
+  oakTreeSeedPrefab: {fileID: 1000013891793334, guid: 97d156d04cae74ef98e21be3b60264d5,
+    type: 2}
+  appleTreeSeedPrefab: {fileID: 1000013891793334, guid: 97d156d04cae74ef98e21be3b60264d5,
+    type: 2}
 --- !u!135 &135000013736871898
 SphereCollider:
   m_ObjectHideFlags: 1
