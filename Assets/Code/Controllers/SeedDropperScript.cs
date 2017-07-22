@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class SeedCollectionScript : MonoBehaviour {
+public class SeedDropperScript : MonoBehaviour {
 
     #region Editor Fields
 
@@ -17,7 +17,7 @@ public class SeedCollectionScript : MonoBehaviour {
 
     #region Helper Methods
 
-    public void InstantiateSeed(TreeType treeType)
+    public void InstantiateSeed(TreeType treeType, bool isPlanted)
 	{
 		GameObject prefab = null;
 
@@ -36,8 +36,11 @@ public class SeedCollectionScript : MonoBehaviour {
 				break;
 		}
 
-		Instantiate (prefab, gameObject.transform.position, gameObject.transform.rotation);
-	}
+		GameObject seed = Instantiate (prefab, gameObject.transform.position, gameObject.transform.rotation) as GameObject;
+        PineTreeScript pineTreeScript = seed.GetComponent<PineTreeScript>();
+        pineTreeScript.IsCollectable = !isPlanted;
+
+    }
 
     #endregion
 }
