@@ -68,8 +68,6 @@ public class RabbitScript : MonoBehaviour
         terrainTargetBoundX = (bounds.size.x - 5f)/2;
         terrainTargetBoundZ = (bounds.size.z - 5f)/2;
 
-        Debug.Log(terrainTargetBoundX);
-
         navMeshAgent = GetComponent<UnityEngine.AI.NavMeshAgent>();
 
         currentTimeTillSeedDrops = timeTillSeedDrops;
@@ -85,7 +83,6 @@ public class RabbitScript : MonoBehaviour
     {
         if (currentTimeTillSeedDrops <= 0)
         {
-            Debug.Log("LEAVE FRUIT");
             ateFruit = false;
             currentTimeTillSeedDrops = timeTillSeedDrops;
             seedDropper.InstantiateSeed(TreeType.PINE_TREE, false);
@@ -124,9 +121,9 @@ public class RabbitScript : MonoBehaviour
         {
             //TODO unlock fruit
             //TODO check if fruit is
+            ateFruit = true;
             StartCoroutine(EatFruit());
             isGoingTowardsFood = false;
-            ateFruit = true;
             Destroy(parent.gameObject);
         }
         else
@@ -163,6 +160,7 @@ public class RabbitScript : MonoBehaviour
         if (ateFruit)
         {
             currentTarget = new Vector3(Random.Range(terrainTargetBoundX, -terrainTargetBoundX), transform.position.y, Random.Range(terrainTargetBoundZ, -terrainTargetBoundZ));
+            navMeshAgent.SetDestination(currentTarget);
             return;
         }
 
@@ -173,14 +171,11 @@ public class RabbitScript : MonoBehaviour
             Transform parent = fruit.transform.parent;
             if (parent != null && parent.gameObject.GetComponent<PineConeScript>())
             {
-                Debug.Log("Found fruit");
-
                 //TODO check if fruit is of interest
                 PineConeScript pineCone = parent.GetComponent<PineConeScript>();
 
                 if (!pineCone.IsLocked)
                 {
-                    Debug.Log("Found fruit and locked it");
                     pineCone.IsLocked = true;
                     currentTarget = parent.transform.position;
                     isGoingTowardsFood = true;
@@ -191,7 +186,6 @@ public class RabbitScript : MonoBehaviour
         }
 
         currentTarget = new Vector3(Random.Range(terrainTargetBoundX, -terrainTargetBoundX), transform.position.y, Random.Range(terrainTargetBoundZ, -terrainTargetBoundZ));
-
         navMeshAgent.SetDestination(currentTarget);
     }
 
