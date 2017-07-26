@@ -42,6 +42,8 @@ public class RabbitScript : MonoBehaviour
 
     private GameObject terrain;
     private Vector3 currentTarget;
+    private PineConeScript currentFruitTarget;
+
     private UnityEngine.AI.NavMeshAgent navMeshAgent;
 
     private bool isResting;
@@ -111,24 +113,37 @@ public class RabbitScript : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        Debug.Log(collision.collider.gameObject);
-
         GameObject bumpedObject = collision.collider.gameObject;
         Transform parent = bumpedObject.transform.parent;
 
         //if animal bumps into fruit he eats it 
         if (parent != null && parent.gameObject.GetComponent<PineConeScript>())
         {
-            //TODO unlock fruit
-            //TODO check if fruit is
+            //TODO check if fruit is fruit he wants
             ateFruit = true;
-            StartCoroutine(EatFruit());
+            PineConeScript pineCone = parent.gameObject.GetComponent<PineConeScript>();
             isGoingTowardsFood = false;
-            Destroy(parent.gameObject);
+            StartCoroutine(EatFruit(pineCone));
         }
         else
         {
             StartCoroutine(Rest());
+        }
+    }
+
+    public void OnDestroy()
+    {
+        if (currentFruitTarget != null)
+        {
+            currentFruitTarget.OnEaten -= OnFruitEaten;
+        }
+    }
+
+    public void OnDisable()
+    {
+        if (currentFruitTarget != null)
+        {
+            currentFruitTarget.OnEaten -= OnFruitEaten;
         }
     }
 
@@ -174,14 +189,15 @@ public class RabbitScript : MonoBehaviour
                 //TODO check if fruit is of interest
                 PineConeScript pineCone = parent.GetComponent<PineConeScript>();
 
-                if (!pineCone.IsLocked)
-                {
-                    pineCone.IsLocked = true;
-                    currentTarget = parent.transform.position;
-                    isGoingTowardsFood = true;
-					navMeshAgent.SetDestination(currentTarget);
-					return;
-                }
+                //subscribe to event
+                pineCone.OnEaten += OnFruitEaten;
+
+                currentTarget = parent.transform.position;
+                currentFruitTarget = pineCone;
+
+                isGoingTowardsFood = true;
+			    navMeshAgent.SetDestination(currentTarget);
+				return;
             }
         }
 
@@ -189,6 +205,21 @@ public class RabbitScript : MonoBehaviour
         navMeshAgent.SetDestination(currentTarget);
     }
 
+    /*
+     * Subscription method when fruit eaten event is called
+     */
+    public void OnFruitEaten(GameObject fruit)
+    {
+        PineConeScript pineCone = fruit.GetComponent<PineConeScript>();
+        pineCone.OnEaten -= OnFruitEaten;
+        currentFruitTarget = null;
+        FindNewTarget();
+    }
+
+    public void PauseNavMeshAgent()
+    {
+        navMeshAgent.destination = transform.position;
+    }
     #endregion
 
     #region Coroutines
@@ -203,24 +234,30 @@ public class RabbitScript : MonoBehaviour
         //TODO play rest animation and wait for it to end
         isResting = true;
 
+        PauseNavMeshAgent();
+
         yield return new WaitForSeconds(3);
 
 		FindNewTarget();
 		isResting = false;
 	}
 
-    IEnumerator EatFruit()
+    IEnumerator EatFruit(PineConeScript pineCone)
     {
         if (isEating)
         {
             yield break;
         }
 
+        //TODO play eat animation and wait for it to end
         isEating = true;
+
+        PauseNavMeshAgent();
 
         yield return new WaitForSeconds(3);
 
-        FindNewTarget();
+        pineCone.SetEaten();
+
         isEating = false;
     }
 

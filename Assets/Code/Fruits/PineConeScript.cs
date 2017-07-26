@@ -3,15 +3,23 @@ using System.Collections;
 
 public class PineConeScript : MonoBehaviour {
 
-    public bool IsLocked { get; set; }
+    #region Delegates
 
-	// Use this for initialization
-	void Start () {
-	
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
+    public delegate void EatAction(GameObject fruit);
+    public event EatAction OnEaten;
+
+    #endregion
+
+    #region Helper Methods
+
+    public void SetEaten()
+    {
+        if (OnEaten != null)
+        {
+            OnEaten(gameObject);
+            Destroy(gameObject);
+        }
+    }
+
+    #endregion
 }
