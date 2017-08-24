@@ -46,8 +46,6 @@ public class BalloonController : MonoBehaviour {
 
     void Update () {
 		
-		#if UNITY_EDITOR
-
 		float movementHorizontal = Input.GetAxis(InputValues.HORIZONTAL);
 		float movementVertical = Input.GetAxis(InputValues.VERTICAL);
 
@@ -64,23 +62,6 @@ public class BalloonController : MonoBehaviour {
 			seeds.Remove(TreeType.PINE_TREE);
 			seedDropper.InstantiateSeed(TreeType.PINE_TREE, true);
 		}
-
-        # else
-
-         if (Input.GetMouseButtonDown (0)) {
-
-		Vector3 position = Input.mousePosition;
-
-		Ray ray = Camera.main.ScreenPointToRay (Input.mousePosition);
-		RaycastHit hit;
-		if (Physics.Raycast (ray, out hit, 500.0f)) {
-		StartCoroutine (MoveBalloon (hit.transform.position));
-		} else {
-		Debug.Log("No hit");
-		}
-
-		}
-		#endif
 	}
 
     #endregion

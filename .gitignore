@@ -16,3 +16,6 @@ Temp
 Tools/node_modules/
 
 *.suo
+*.exe
+*.apk
+Builds/
