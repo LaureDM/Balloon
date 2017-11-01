@@ -13,6 +13,12 @@ public class SeedDropperScript : MonoBehaviour {
 	[SerializeField]
 	private GameObject appleTreeSeedPrefab;
 
+    [SerializeField]
+    private GameObject animalModel;
+
+    [SerializeField]
+    private GameObject seedEffectPrefab;
+
     #endregion
 
     #region Helper Methods

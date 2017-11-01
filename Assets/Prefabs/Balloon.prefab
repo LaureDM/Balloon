@@ -37,6 +37,7 @@ GameObject:
   - component: {fileID: 4000013287299186}
   - component: {fileID: 54000010274612488}
   - component: {fileID: 114000010596266300}
+  - component: {fileID: 114474788205905798}
   m_Layer: 0
   m_Name: Balloon
   m_TagString: Untagged
@@ -199,7 +200,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1000013796406484}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 21.06, z: -25.7}
+  m_LocalPosition: {x: 0, y: 21.06, z: -20.1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4458433450491360}
@@ -598,9 +599,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 15
   tilt: 0.5
-  balloonCamera: {fileID: 0}
-  floor: {fileID: 0}
   seedDropper: {fileID: 114000010868952362}
+  inventoryManager: {fileID: 114474788205905798}
   balloonAnimator: {fileID: 95572774716764472}
 --- !u!114 &114000010868952362
 MonoBehaviour:
@@ -619,6 +619,8 @@ MonoBehaviour:
     type: 2}
   appleTreeSeedPrefab: {fileID: 1000013891793334, guid: 97d156d04cae74ef98e21be3b60264d5,
     type: 2}
+  animalModel: {fileID: 0}
+  seedEffectPrefab: {fileID: 0}
 --- !u!114 &114055613487965390
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -628,6 +630,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7d39b7af8e077454a9453849c04e551c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &114474788205905798
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000013796406484}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c1d74a911ebb542a19d7ba1eb35c5a0d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!119 &119202339137909170

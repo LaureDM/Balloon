@@ -14,7 +14,7 @@ public class PineConeScript : MonoBehaviour {
 
     public void SetEaten()
     {
-        if (OnEaten != null)
+        if (OnEaten != null && gameObject != null)
         {
             OnEaten(gameObject);
             Destroy(gameObject);

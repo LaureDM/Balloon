@@ -16,29 +16,18 @@ public class BalloonController : MonoBehaviour {
 	[SerializeField]
 	private SeedDropperScript seedDropper;
 
+    [SerializeField]
+    private InventoryManager inventoryManager;
+
     #endregion
 
     #region Fields
 
     public Animator balloonAnimator;
 
-	private List<TreeType> seeds;
-
     #endregion
 
     #region Initialization
-
-    void Start()
-	{
-		seeds = new List<TreeType> ();
-
-		seeds.Add (TreeType.OAK);
-		seeds.Add (TreeType.OAK);
-		seeds.Add (TreeType.OAK);
-		seeds.Add (TreeType.APPLE_TREE);
-		seeds.Add (TreeType.PINE_TREE);
-		seeds.Add (TreeType.PINE_TREE);
-	}
 
     #endregion
 
@@ -59,8 +48,10 @@ public class BalloonController : MonoBehaviour {
 
 		if (Input.GetButtonDown(InputValues.JUMP))
 		{
-			seeds.Remove(TreeType.PINE_TREE);
-			seedDropper.InstantiateSeed(TreeType.PINE_TREE, true);
+            if (inventoryManager.DecreaseSeedCount(TreeType.PINE_TREE))
+            {
+                seedDropper.InstantiateSeed(TreeType.PINE_TREE, true);
+            }
 		}
 	}
 

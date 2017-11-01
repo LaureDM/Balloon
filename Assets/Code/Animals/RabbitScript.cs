@@ -31,10 +31,10 @@ public class RabbitScript : MonoBehaviour
     private float durationWithoutTrees;
 
     [SerializeField]
-    private SeedDropperScript seedDropper;
+    private float timeTillSeedDrops;
 
     [SerializeField]
-    private float timeTillSeedDrops;
+    private SeedDropEffectScript seedDropEffectScript;
 
     #endregion
 
@@ -56,6 +56,7 @@ public class RabbitScript : MonoBehaviour
     private bool ateFruit;
 
     private float currentTimeTillSeedDrops;
+    private InventoryManager inventoryManager;
 
     #endregion
 
@@ -74,6 +75,7 @@ public class RabbitScript : MonoBehaviour
 
         currentTimeTillSeedDrops = timeTillSeedDrops;
 
+        inventoryManager = FindObjectOfType<InventoryManager>();
         FindNewTarget();
     }
 
@@ -87,7 +89,7 @@ public class RabbitScript : MonoBehaviour
         {
             ateFruit = false;
             currentTimeTillSeedDrops = timeTillSeedDrops;
-            seedDropper.InstantiateSeed(TreeType.PINE_TREE, false);
+            LeaveSeed();
         }
 
         if (ateFruit)
@@ -220,6 +222,24 @@ public class RabbitScript : MonoBehaviour
     {
         navMeshAgent.destination = transform.position;
     }
+
+    public void UnPauseNavMeshAgent()
+    {
+        navMeshAgent.destination = currentTarget;
+    }
+
+    public void LeaveSeed()
+    {
+        PauseNavMeshAgent();
+
+        //TODO calculate random seed
+        StartCoroutine(seedDropEffectScript.CreateEffect());
+
+        inventoryManager.IncreaseSeedCount(TreeType.PINE_TREE);
+
+        UnPauseNavMeshAgent();
+    }
+
     #endregion
 
     #region Coroutines
