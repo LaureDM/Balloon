@@ -28,16 +28,14 @@ public class SeedDropEffectScript : MonoBehaviour
     // Update is called once per frame
     void Update () 
     {
-        //if (rotate)
+        if (rotate)
         {
-            Debug.Log("rotating");
             transform.RotateAround(animal.transform.position, Vector3.up, 360 * Time.deltaTime);    
         }
 	}
 
     public IEnumerator CreateEffect()
     {
-        Debug.Log("EFFECT");
         transform.localPosition = originalPosition;
         transform.localRotation = originalRotation;
 
