@@ -43,12 +43,6 @@ public class PineTreeScript : MonoBehaviour, ITree
 
     #endregion
 
-    #region Properties
-
-    public bool IsCollectable { get; set; }
-
-    #endregion
-
     #region Fields
 
     private TreeCollectionScript treeCollection;
@@ -111,7 +105,7 @@ public class PineTreeScript : MonoBehaviour, ITree
     public void OnCollisionEnter(Collision collider)
     {
         //seed hits the ground
-        if (collider.gameObject.GetComponent<TerrainScript>() != null && !IsCollectable)
+        if (collider.gameObject.GetComponent<TerrainScript>() != null)
         {
             rigidBody.isKinematic = true;
 

@@ -4,27 +4,32 @@ using System.Collections.Generic;
 
 public class InventoryManager : MonoBehaviour
 {
-    private Dictionary<TreeType, int> seeds;
+    public Dictionary<TreeType, int> Seeds { get; set; }
 
-	// Use this for initialization
-	void Start()
-	{
+    private void Awake()
+    {
         //THIS SHOULD BE FETCHED FROM DB
-        seeds = new Dictionary<TreeType, int>();
+        Seeds = new Dictionary<TreeType, int>();
 
         //TODO TEST CODE
-        seeds.Add(TreeType.PINE_TREE, 3);
+        Seeds.Add(TreeType.PINE_TREE, 3);
+    }
+
+    // Use this for initialization
+    void Start()
+	{
+        
 	}
 
     public void IncreaseSeedCount(TreeType seed)
     {
-        if (seeds.ContainsKey(seed))
+        if (Seeds.ContainsKey(seed))
         {
-            seeds[seed] = seeds[seed] + 1;
+            Seeds[seed] = Seeds[seed] + 1;
         }
         else
         {
-            seeds.Add(seed, 1);
+            Seeds.Add(seed, 1);
         }
     }
 
@@ -33,7 +38,7 @@ public class InventoryManager : MonoBehaviour
     {
         int currentCount = 0;
 
-        if (seeds.ContainsKey(seed) && seeds.TryGetValue(seed, out currentCount))
+        if (Seeds.ContainsKey(seed) && Seeds.TryGetValue(seed, out currentCount))
         {
             if (currentCount == 0)
             {
@@ -42,7 +47,7 @@ public class InventoryManager : MonoBehaviour
             }
             else
             {
-                seeds[seed] = currentCount - 1;
+                Seeds[seed] = currentCount - 1;
                 return true;
             }
         }

@@ -50,7 +50,7 @@ public class BalloonController : MonoBehaviour {
 		{
             if (inventoryManager.DecreaseSeedCount(TreeType.PINE_TREE))
             {
-                seedDropper.InstantiateSeed(TreeType.PINE_TREE, true);
+                seedDropper.InstantiateSeed(TreeType.PINE_TREE);
             }
 		}
 	}
