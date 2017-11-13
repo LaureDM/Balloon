@@ -15,6 +15,9 @@ public class SeedDropperScript : MonoBehaviour {
 
     private GameObject instantiatedSeed;
 
+    private bool isDragging;
+    private bool isSafeToDrop;
+
     #endregion
 
     #region Unity Methods
@@ -22,10 +25,36 @@ public class SeedDropperScript : MonoBehaviour {
     public void Update()
     {
         //get touch input and get mouse input
-        if (Input.GetMouseButtonDown(0))
+        if (isDragging && instantiatedSeed != null)
         {
             //screen?
-            instantiatedSeed.transform.position = Input.mousePosition;
+            Vector3 mousePosition = Input.mousePosition;
+            
+            RaycastHit hit;
+            Ray ray = Camera.main.ScreenPointToRay(mousePosition);
+
+            if (Physics.Raycast(ray, out hit)) 
+            {
+                //collider is the terrain, safe to drop seed
+                if (hit.collider.gameObject.GetComponent<TerrainScript>())
+                {
+                    isSafeToDrop = true;
+                    
+                    //TODO show an indication at the point so user can see where the seed will drop
+
+                    Vector3 seedPosition = new Vector3(hit.point.x, hit.point.y + 10, hit.point.z);
+                    instantiatedSeed.transform.position = seedPosition;
+                }
+                else
+                {
+                    isSafeToDrop = false;
+                }
+            }
+            //seed dragging is out of bounds, cancel the seed drag
+            else
+            {
+                DestroySeed();
+            }
         }
 
     }
@@ -55,11 +84,20 @@ public class SeedDropperScript : MonoBehaviour {
 
         instantiatedSeed = Instantiate (prefab, gameObject.transform.position, gameObject.transform.rotation) as GameObject;
         instantiatedSeed.transform.parent = transform;
+        isDragging = true;
     }
 
     public void DropSeed()
     {
-        
+        if (isSafeToDrop)
+        {
+            instantiatedSeed = null;
+            isDragging = false;
+        }
+        else
+        {
+            DestroySeed();
+        }
     }
 
     public void DestroySeed()
