@@ -376,6 +376,99 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 330793141}
+--- !u!1001 &381463288
+Prefab:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 4000010735539320, guid: 97d156d04cae74ef98e21be3b60264d5, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4000010735539320, guid: 97d156d04cae74ef98e21be3b60264d5, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4000010735539320, guid: 97d156d04cae74ef98e21be3b60264d5, type: 2}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4000010735539320, guid: 97d156d04cae74ef98e21be3b60264d5, type: 2}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4000010735539320, guid: 97d156d04cae74ef98e21be3b60264d5, type: 2}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4000010735539320, guid: 97d156d04cae74ef98e21be3b60264d5, type: 2}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4000010735539320, guid: 97d156d04cae74ef98e21be3b60264d5, type: 2}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4000010735539320, guid: 97d156d04cae74ef98e21be3b60264d5, type: 2}
+      propertyPath: m_RootOrder
+      value: 12
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 75292090078995026, guid: 97d156d04cae74ef98e21be3b60264d5, type: 2}
+    - {fileID: 114000012004512832, guid: 97d156d04cae74ef98e21be3b60264d5, type: 2}
+  m_ParentPrefab: {fileID: 100100000, guid: 97d156d04cae74ef98e21be3b60264d5, type: 2}
+  m_IsPrefabParent: 0
+--- !u!1 &381463289 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1000013891793334, guid: 97d156d04cae74ef98e21be3b60264d5,
+    type: 2}
+  m_PrefabInternal: {fileID: 381463288}
+--- !u!114 &381463290
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 381463289}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6a570318e3d5e478986b3a57c77da8df, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  growStages:
+    m_keys: 010000000200000003000000
+    m_values:
+    - {fileID: 1000012066896288, guid: 89d0f6dac531e4d889ab392801a14ed1, type: 2}
+    - {fileID: 1000011563256864, guid: 0fedd56d1909046c186eac32fcc80899, type: 2}
+    - {fileID: 1000011316788818, guid: d104d00d2726c462fb803e6fb6307459, type: 2}
+  growStageDurations:
+    m_keys: 010000000200000003000000
+    m_values:
+    - 20
+    - 20
+    - 20
+  possibleAnimals:
+    m_keys: 0000000001000000
+    m_values: 460000001e000000
+  timeTillNextAnimal: 60
+  timeTillNextFruit: 20
+  fruit: 1
+  fruitSpawnPosition: {fileID: 381463292}
+  seed: {fileID: 381463291}
+  leavesParticlesPrefab: {fileID: 1163563870711770, guid: 803442ffd14f863478f4d366cfd614c7,
+    type: 2}
+--- !u!1 &381463291 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1079180239461874, guid: 97d156d04cae74ef98e21be3b60264d5,
+    type: 2}
+  m_PrefabInternal: {fileID: 381463288}
+--- !u!114 &381463292 stripped
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 114184087366120582, guid: 97d156d04cae74ef98e21be3b60264d5,
+    type: 2}
+  m_PrefabInternal: {fileID: 381463288}
+  m_Script: {fileID: 11500000, guid: 22ab797dc94484267a65669dd9d0e7ed, type: 3}
 --- !u!1 &425655532
 GameObject:
   m_ObjectHideFlags: 0
@@ -1675,7 +1768,7 @@ RectTransform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1923502245}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 737, y: 492, z: 0}
+  m_LocalPosition: {x: 491, y: 492, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 839156272}

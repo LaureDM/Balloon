@@ -3,8 +3,12 @@ namespace AssemblyCSharp.Code.Enums
 {
     public enum Animal
     {
-        RABBIT,
-        BIRD,
-        OWL
+        Rabbit,
+        Squirrel,
+        Chicken,
+        Boar,
+        Crow,
+        Bear,
+        Snake
     }
 }

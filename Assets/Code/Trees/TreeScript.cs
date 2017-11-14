@@ -1,9 +1,11 @@
-﻿﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using AssemblyCSharp.Code.Enums;
 using AssemblyCSharp.Code.Controllers;
+using System.Collections.Generic;
+using System.Linq;
 
-public class PineTreeScript : MonoBehaviour
+public class TreeScript : MonoBehaviour
 {
     #region Constants
 
@@ -14,13 +16,13 @@ public class PineTreeScript : MonoBehaviour
     #region Editor Fields
 
     [SerializeField]
-    private GameObject[] growStages;
+    private GrowstageDictionary growStages;
 
     [SerializeField]
-    private GameObject[] animals;
+    private GrowstageDurationDictionary growStageDurations;
 
     [SerializeField]
-    private float timeTillNextStage;
+    private AnimalPercentageDictionary possibleAnimals;
 
     [SerializeField]
     private float timeTillNextAnimal;
@@ -29,10 +31,10 @@ public class PineTreeScript : MonoBehaviour
     private float timeTillNextFruit;
 
     [SerializeField]
-    private GameObject[] fruits;
+    private FruitType fruit;
 
     [SerializeField]
-    private FruitSpawnPosition[] fruitSpawnPositions;
+    private FruitSpawnPosition fruitSpawnPosition;
 
     [SerializeField]
     private GameObject seed;
@@ -49,19 +51,17 @@ public class PineTreeScript : MonoBehaviour
     private AnimalCollectionScript animalSpawner;
 
     private Transform currentStagePrefab;
-    private GrowState currentStage = GrowState.SEED;
+    private GrowState currentStage;
     private float startTime;
-    private float rabbitSpawnTime;
+    private float animalSpawnTime;
     private float fruitSpawnTime;
 
     private Rigidbody rigidBody;
 
-    //todo temporary
-    private bool isRabbitSpawned;
-
     private Vector3 terrainUp;
 
     private Vector3 treeScale;
+    private float currentDuration;
 
     #endregion
 
@@ -70,6 +70,9 @@ public class PineTreeScript : MonoBehaviour
     void Start()
     {
         currentStagePrefab = seed.transform;
+        currentStage = GrowState.SEED;
+        growStageDurations.TryGetValue(currentStage, out currentDuration);
+
         rigidBody = GetComponent<Rigidbody>();
         animalSpawner = FindObjectOfType<AnimalCollectionScript>();
         treeCollection = FindObjectOfType<TreeCollectionScript>();
@@ -87,11 +90,11 @@ public class PineTreeScript : MonoBehaviour
             GrowToNextStage();
         }
         //when adult, spawn animals
-        else if (currentStage == GrowState.ADULT && ShouldSpawnRabbit())
+        else if (currentStage == GrowState.ADULT && ShouldSpawnAnimal())
         {
-            isRabbitSpawned = true;
-            animalSpawner.SpawnAnimal(Animal.Rabbit);
-            rabbitSpawnTime = Time.time;
+            Animal animal = CalculateAnimalToSpawn();
+            animalSpawner.SpawnAnimal(animal);
+            animalSpawnTime = Time.time;
         }
         //when adult, drop fruits
         else if (currentStage == GrowState.ADULT && ShouldSpawnFruit())
@@ -130,7 +133,7 @@ public class PineTreeScript : MonoBehaviour
 
     private bool IsReadyToGrow()
     {
-        return (Time.time - startTime) > timeTillNextStage;
+        return (Time.time - startTime) > currentDuration;
     }
 
     public bool IsAdult()
@@ -147,29 +150,28 @@ public class PineTreeScript : MonoBehaviour
             case GrowState.SEED:
 
                 currentStage = GrowState.SEEDLING;
-                newStagePrefab = growStages[0];
                 break;
 
             case GrowState.SEEDLING:
 
                 currentStage = GrowState.SAPLING;
-                newStagePrefab = growStages[1];
                 break;
 
             case GrowState.SAPLING:
 
                 currentStage = GrowState.ADULT;
-                newStagePrefab = growStages[2];
                 break;
         }
 
+        growStages.TryGetValue(currentStage, out newStagePrefab);
+        growStageDurations.TryGetValue(currentStage, out currentDuration);
         startTime = Time.time;
         StartCoroutine(ChangeTree(newStagePrefab));
     }
 
-    private bool ShouldSpawnRabbit()
+    private bool ShouldSpawnAnimal()
     {
-        return (Time.time - rabbitSpawnTime) > timeTillNextAnimal && !isRabbitSpawned;
+        return (Time.time - animalSpawnTime) > timeTillNextAnimal;
     }
 
     private bool ShouldSpawnFruit()
@@ -179,14 +181,30 @@ public class PineTreeScript : MonoBehaviour
 
     void TryToSpawnFruit()
     {
-        foreach (FruitSpawnPosition fruitSpawnPosition in fruitSpawnPositions)
+        if (!fruitSpawnPosition.IsFruitSpawned())
         {
-            if (!fruitSpawnPosition.IsFruitSpawned())
+            fruitSpawnPosition.SpawnFruit(fruit);
+            fruitSpawnTime = Time.time;
+        }
+    }
+
+    private Animal CalculateAnimalToSpawn()
+    {
+        int randomNumber = Random.Range(0, 100);
+        int percentage = 0;
+
+        foreach (KeyValuePair<Animal, int> entry in possibleAnimals)
+        {
+            percentage += entry.Value;
+
+            if (randomNumber <= percentage)
             {
-                fruitSpawnPosition.SpawnFruit(FruitType.APPLE);
-                fruitSpawnTime = Time.time;
+                return entry.Key;
             }
         }
+
+        //if for some reason something goes wrong, return the first animal possible
+        return possibleAnimals.First().Key;
     }
 
     #endregion

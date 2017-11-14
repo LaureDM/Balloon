@@ -19,9 +19,8 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4000010735539320}
-  - component: {fileID: 114000012004512832}
   - component: {fileID: 54000012587498990}
-  - component: {fileID: 75292090078995026}
+  - component: {fileID: 114642949097472118}
   m_Layer: 0
   m_Name: PineTree
   m_TagString: PineTree
@@ -232,44 +231,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.026168417, y: 0.010541096, z: 0.011352636}
   m_Center: {x: -0.0029685646, y: 0.000010285294, z: 0.006002656}
---- !u!75 &75292090078995026
-ConstantForce:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000013891793334}
-  m_Enabled: 1
-  m_Force: {x: 0, y: -3, z: 0}
-  m_RelativeForce: {x: 0, y: 0, z: 0}
-  m_Torque: {x: 0, y: 0, z: 0}
-  m_RelativeTorque: {x: 0, y: 0, z: 0}
---- !u!114 &114000012004512832
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000013891793334}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 10331ecddd33e4a079730fac0635940d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  growStages:
-  - {fileID: 1000012066896288, guid: 89d0f6dac531e4d889ab392801a14ed1, type: 2}
-  - {fileID: 1000011563256864, guid: 0fedd56d1909046c186eac32fcc80899, type: 2}
-  - {fileID: 1000011316788818, guid: d104d00d2726c462fb803e6fb6307459, type: 2}
-  animals:
-  - {fileID: 1000013428927948, guid: 4e99e4590ed1447c293f3ab6202aad93, type: 2}
-  - {fileID: 1000013428927948, guid: 4e99e4590ed1447c293f3ab6202aad93, type: 2}
-  timeTillNextStage: 5
-  timeTillNextAnimal: 15
-  timeTillNextFruit: 15
-  fruits: []
-  fruitSpawnPositions:
-  - {fileID: 114184087366120582}
-  seed: {fileID: 1079180239461874}
-  leavesParticlesPrefab: {fileID: 1163563870711770, guid: 803442ffd14f863478f4d366cfd614c7,
-    type: 2}
 --- !u!114 &114184087366120582
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -284,6 +245,39 @@ MonoBehaviour:
   pineconePrefab: {fileID: 1130671022595372, guid: 66977a6e32974d74cb7c0297f00cbfb1,
     type: 2}
   applePrefab: {fileID: 1130671022595372, guid: 66977a6e32974d74cb7c0297f00cbfb1,
+    type: 2}
+--- !u!114 &114642949097472118
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000013891793334}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6a570318e3d5e478986b3a57c77da8df, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  growStages:
+    m_keys: 010000000200000003000000
+    m_values:
+    - {fileID: 1000012066896288, guid: 89d0f6dac531e4d889ab392801a14ed1, type: 2}
+    - {fileID: 1000011563256864, guid: 0fedd56d1909046c186eac32fcc80899, type: 2}
+    - {fileID: 1000011316788818, guid: d104d00d2726c462fb803e6fb6307459, type: 2}
+  growStageDurations:
+    m_keys: 010000000200000003000000
+    m_values:
+    - 20
+    - 20
+    - 20
+  possibleAnimals:
+    m_keys: 0000000001000000
+    m_values: 460000001e000000
+  timeTillNextAnimal: 60
+  timeTillNextFruit: 20
+  fruit: 1
+  fruitSpawnPosition: {fileID: 114184087366120582}
+  seed: {fileID: 1079180239461874}
+  leavesParticlesPrefab: {fileID: 1163563870711770, guid: 803442ffd14f863478f4d366cfd614c7,
     type: 2}
 --- !u!114 &114943204905070332
 MonoBehaviour:
