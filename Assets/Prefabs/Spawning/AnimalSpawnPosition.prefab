@@ -51,5 +51,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e3145699439049f7953f8544b8cb503, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rabbitPrefab: {fileID: 1000013428927948, guid: 4e99e4590ed1447c293f3ab6202aad93,
-    type: 2}
+  animals:
+    m_keys: 
+    m_values: []

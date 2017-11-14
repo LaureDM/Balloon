@@ -50,7 +50,7 @@ public class TreeScript : MonoBehaviour
 
     private AnimalCollectionScript animalSpawner;
 
-    private Transform currentStagePrefab;
+    private Transform currentStageTransform;
     private GrowState currentStage;
     private float startTime;
     private float animalSpawnTime;
@@ -69,9 +69,13 @@ public class TreeScript : MonoBehaviour
 
     void Start()
     {
-        currentStagePrefab = seed.transform;
         currentStage = GrowState.SEED;
         growStageDurations.TryGetValue(currentStage, out currentDuration);
+        GameObject seedPrefab = null;
+        growStages.TryGetValue(currentStage, out seedPrefab);
+
+        GameObject seed = Instantiate(seedPrefab, transform.position, transform.rotation, gameObject.transform) as GameObject;
+        currentStageTransform = seed.transform;
 
         rigidBody = GetComponent<Rigidbody>();
         animalSpawner = FindObjectOfType<AnimalCollectionScript>();
@@ -215,32 +219,32 @@ public class TreeScript : MonoBehaviour
     {
         float normalizedScale = treeScale.normalized.magnitude;
         float scaleSpeed = 6f;
-
+        
         for (float s = normalizedScale; s >= 0; s-=Time.deltaTime * scaleSpeed)
         {
-            currentStagePrefab.transform.localScale = new Vector3(s, s, s);
+            currentStageTransform.transform.localScale = new Vector3(s, s, s);
             yield return new WaitForEndOfFrame();
         }
 
-        currentStagePrefab.transform.localScale = Vector3.zero;
+        currentStageTransform.transform.localScale = Vector3.zero;
 
-        Destroy(currentStagePrefab.gameObject);
+        Destroy(currentStageTransform.gameObject);
 
         GameObject treeStage = Instantiate(newStagePrefab, transform.position, transform.rotation) as GameObject;
         
-        currentStagePrefab = treeStage.transform;
-        currentStagePrefab.parent = gameObject.transform;
-        currentStagePrefab.transform.up = terrainUp;
+        currentStageTransform = treeStage.transform;
+        currentStageTransform.parent = gameObject.transform;
+        currentStageTransform.transform.up = terrainUp;
 
         for (float s = 0f; s < normalizedScale; s += Time.deltaTime * scaleSpeed)
         {
-            currentStagePrefab.transform.localScale = new Vector3(s, s, s);
+            currentStageTransform.transform.localScale = new Vector3(s, s, s);
             yield return new WaitForEndOfFrame();
         }
 
-        currentStagePrefab.transform.localScale = treeScale;
+        currentStageTransform.transform.localScale = treeScale;
 
-        float particleHeight = (transform.position.y + currentStagePrefab.GetComponentInChildren<Collider>().bounds.size.y)/2;
+        float particleHeight = (transform.position.y + currentStageTransform.GetComponentInChildren<Collider>().bounds.size.y)/2;
         Vector3 particlesPosition = new Vector3(transform.position.x, particleHeight, transform.position.z);
 
         GameObject particles = Instantiate(leavesParticlesPrefab, particlesPosition, transform.rotation) as GameObject;
