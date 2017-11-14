@@ -1,8 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class CameraDragManager : MonoBehaviour {
+
+    public bool Disabled { get; set; }
 
     private static readonly float PanSpeed = 50f;
     private static readonly float ZoomSpeedTouch = 0.1f;
@@ -27,13 +30,16 @@ public class CameraDragManager : MonoBehaviour {
 
     void Update()
     {
+        if (Disabled)
+        {
+            return;
+        }
+
 #if UNITY_EDITOR
         HandleMouse();
 #else
         HandleTouch();
-
 #endif
-
     }
 
     void HandleTouch()
@@ -42,6 +48,7 @@ public class CameraDragManager : MonoBehaviour {
         {
 
             case 1: // Panning
+
                 wasZoomingLastFrame = false;
 
                 // If the touch began, capture its position and its finger ID.
@@ -59,6 +66,7 @@ public class CameraDragManager : MonoBehaviour {
                 break;
 
             case 2: // Zooming
+                
                 Vector2[] newPositions = new Vector2[] { Input.GetTouch(0).position, Input.GetTouch(1).position };
                 if (!wasZoomingLastFrame)
                 {

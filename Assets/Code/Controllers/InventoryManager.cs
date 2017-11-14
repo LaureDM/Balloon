@@ -4,50 +4,77 @@ using System.Collections.Generic;
 
 public class InventoryManager : MonoBehaviour
 {
-    private Dictionary<TreeType, int> seeds;
 
-	// Use this for initialization
-	void Start()
-	{
+    #region Delegates
+
+    public delegate void CountAction(TreeType type);
+    public event CountAction OnCountChanged;
+
+    #endregion
+
+    public Dictionary<TreeType, int> Seeds { get; set; }
+
+    private void Awake()
+    {
         //THIS SHOULD BE FETCHED FROM DB
-        seeds = new Dictionary<TreeType, int>();
+        Seeds = new Dictionary<TreeType, int>();
 
         //TODO TEST CODE
-        seeds.Add(TreeType.PINE_TREE, 3);
+        Seeds.Add(TreeType.PINE_TREE, 3);
+    }
+
+    // Use this for initialization
+    void Start()
+	{
+        
 	}
 
     public void IncreaseSeedCount(TreeType seed)
     {
-        if (seeds.ContainsKey(seed))
+        if (Seeds.ContainsKey(seed))
         {
-            seeds[seed] = seeds[seed] + 1;
+            Seeds[seed] = Seeds[seed] + 1;
         }
         else
         {
-            seeds.Add(seed, 1);
+            Seeds.Add(seed, 1);
+        }
+
+        if (OnCountChanged != null)
+        {
+            OnCountChanged(seed);
         }
     }
 
-
-    public bool DecreaseSeedCount(TreeType seed)
+    public bool CanInstantiateSeed(TreeType seed)
     {
         int currentCount = 0;
 
-        if (seeds.ContainsKey(seed) && seeds.TryGetValue(seed, out currentCount))
+        if (Seeds.ContainsKey(seed) && Seeds.TryGetValue(seed, out currentCount))
         {
             if (currentCount == 0)
             {
-                //return false because you can not instantiate seed
                 return false;
             }
             else
             {
-                seeds[seed] = currentCount - 1;
                 return true;
             }
         }
 
+        //seed does not exist in the list so return false
         return false;
+    }
+
+    public void DecreaseSeedCount(TreeType seed)
+    {
+        int currentCount = 0;
+        Seeds.TryGetValue(seed, out currentCount);
+        Seeds[seed] = currentCount - 1;
+        if (OnCountChanged != null)
+        {
+            OnCountChanged(seed);
+        }
     }
 
 }

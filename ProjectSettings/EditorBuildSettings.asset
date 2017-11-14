@@ -8,6 +8,9 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/_Scenes/Main.unity
     guid: a16a2b0a2efb649c1a9dad2ad14254ab
-  - enabled: 1
+  - enabled: 0
     path: Assets/_Scenes/CameraTestScene.unity
     guid: a8d877ce65106e243b90b8eabd91beb5
+  - enabled: 1
+    path: Assets/_Scenes/MainLaure.unity
+    guid: 465ce17d6fde0cc44a70e7aa7ae67b46
