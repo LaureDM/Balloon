@@ -13,10 +13,10 @@ public class RabbitScript : MonoBehaviour
 
 
     /*
-     * The tags of the trees the animal is attracted by
+     * The types of trees the animal is attracted by
      */
     [SerializeField]
-    private string[] treeTags;
+    private TreeType[] treeTypes;
 
     /*
      * The seeds the animal can drop
@@ -152,21 +152,6 @@ public class RabbitScript : MonoBehaviour
     #endregion
 
     #region Helper Methods
-
-    bool CheckTreesOfInterest()
-    {
-        foreach (string treeTag in treeTags)
-        {
-            GameObject tree = GameObject.FindWithTag(treeTag);
-
-            if (tree != null)
-            {
-                return true;
-            }
-        }
-
-        return false;
-    }
 
     void FindNewTarget()
     {

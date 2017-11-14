@@ -37,9 +37,6 @@ public class TreeScript : MonoBehaviour
     private FruitSpawnPosition fruitSpawnPosition;
 
     [SerializeField]
-    private GameObject seed;
-
-    [SerializeField]
     private GameObject leavesParticlesPrefab;
 
     #endregion
@@ -67,7 +64,7 @@ public class TreeScript : MonoBehaviour
 
     #region Initialization
 
-    void Start()
+    void Awake()
     {
         currentStage = GrowState.SEED;
         growStageDurations.TryGetValue(currentStage, out currentDuration);
@@ -77,6 +74,10 @@ public class TreeScript : MonoBehaviour
         GameObject seed = Instantiate(seedPrefab, transform.position, transform.rotation, gameObject.transform) as GameObject;
         currentStageTransform = seed.transform;
 
+    }
+
+    void Start()
+    {
         rigidBody = GetComponent<Rigidbody>();
         animalSpawner = FindObjectOfType<AnimalCollectionScript>();
         treeCollection = FindObjectOfType<TreeCollectionScript>();
@@ -97,6 +98,7 @@ public class TreeScript : MonoBehaviour
         else if (currentStage == GrowState.ADULT && ShouldSpawnAnimal())
         {
             Animal animal = CalculateAnimalToSpawn();
+            Debug.Log(animal);
             animalSpawner.SpawnAnimal(animal);
             animalSpawnTime = Time.time;
         }

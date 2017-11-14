@@ -27,6 +27,9 @@ public class GameHudScreenManager : MonoBehaviour
     [SerializeField]
     private Sprite cancelIcon;
 
+    [SerializeField]
+    private GameObject counter;
+
     #endregion
 
     #region Fields
@@ -126,6 +129,7 @@ public class GameHudScreenManager : MonoBehaviour
             seedDropper.InstantiateSeed(selectedSeed);
 
             seedButtonIcon.sprite = cancelIcon;
+            counter.SetActive(false);
         }
     }
 
@@ -134,6 +138,7 @@ public class GameHudScreenManager : MonoBehaviour
         cameraDragManager.Disabled = false;
 
         seedButtonIcon.sprite = seedIcon;
+        counter.SetActive(true);
         
         seedDropper.DropSeed();
     }
@@ -142,6 +147,7 @@ public class GameHudScreenManager : MonoBehaviour
     {
         seedDropper.DestroySeed();
         seedButtonIcon.sprite = seedIcon;
+        counter.SetActive(true);
     }
 
     #endregion
