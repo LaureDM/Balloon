@@ -4,6 +4,14 @@ using System.Collections.Generic;
 
 public class InventoryManager : MonoBehaviour
 {
+
+    #region Delegates
+
+    public delegate void CountAction(TreeType type);
+    public event CountAction OnCountChanged;
+
+    #endregion
+
     public Dictionary<TreeType, int> Seeds { get; set; }
 
     private void Awake()
@@ -31,10 +39,14 @@ public class InventoryManager : MonoBehaviour
         {
             Seeds.Add(seed, 1);
         }
+
+        if (OnCountChanged != null)
+        {
+            OnCountChanged(seed);
+        }
     }
 
-
-    public bool DecreaseSeedCount(TreeType seed)
+    public bool CanInstantiateSeed(TreeType seed)
     {
         int currentCount = 0;
 
@@ -42,17 +54,27 @@ public class InventoryManager : MonoBehaviour
         {
             if (currentCount == 0)
             {
-                //return false because you can not instantiate seed
                 return false;
             }
             else
             {
-                Seeds[seed] = currentCount - 1;
                 return true;
             }
         }
 
+        //seed does not exist in the list so return false
         return false;
+    }
+
+    public void DecreaseSeedCount(TreeType seed)
+    {
+        int currentCount = 0;
+        Seeds.TryGetValue(seed, out currentCount);
+        Seeds[seed] = currentCount - 1;
+        if (OnCountChanged != null)
+        {
+            OnCountChanged(seed);
+        }
     }
 
 }

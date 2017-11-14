@@ -15,6 +15,18 @@ public class GameHudScreenManager : MonoBehaviour
     [SerializeField]
     private Image seedImage;
 
+    [SerializeField]
+    private Button seedButton;
+
+    [SerializeField]
+    private Image seedButtonIcon;
+
+    [SerializeField]
+    private Sprite seedIcon;
+
+    [SerializeField]
+    private Sprite cancelIcon;
+
     #endregion
 
     #region Fields
@@ -35,22 +47,61 @@ public class GameHudScreenManager : MonoBehaviour
 
         selectedSeed = inventoryManager.Seeds.First().Key;
 
-        //get the first treetype of the dictionary
-        //initialize fields
+        InitializeSeedButton();
 
+        //subscribe to inventory events
+        inventoryManager.OnCountChanged += OnCountChanged;
+
+        seedButtonIcon.sprite = seedIcon;
     }
 
     // Update is called once per frame
     void Update()
     {
-
+        
     }
 
     #region Helper Methods
 
     public void InitializeSeedButton()
     {
-        
+        //TODO change image
+        UpdateCount(selectedSeed);
+        CheckInteractable();
+    }
+
+    private void UpdateCount(TreeType type)
+    {
+        int count = 0;
+        inventoryManager.Seeds.TryGetValue(type, out count);
+        seedCount.text = count.ToString();
+    }
+
+    private void CheckInteractable()
+    {
+        if (inventoryManager.CanInstantiateSeed(selectedSeed))
+        {
+            seedButton.interactable = true;
+        }
+        else
+        {
+            seedButton.interactable = false;
+        }
+    }
+
+    #endregion
+
+    #region Event Callbacks
+
+    public void OnCountChanged(TreeType type)
+    {
+        if (selectedSeed == type)
+        {
+            InitializeSeedButton();            
+        }
+
+        //TODO
+        //else display add of seed?
     }
 
     #endregion
@@ -59,37 +110,38 @@ public class GameHudScreenManager : MonoBehaviour
 
     public void OnRightArrowClicked()
     {
-        
+        //TODO
     }
 
     public void OnLeftArrowClicked()
     {
-        
+        //TODO
     }
 
     public void OnStartDrag()
     {
-        cameraDragManager.Disabled = true;
+        if (inventoryManager.CanInstantiateSeed(selectedSeed))
+        {
+            cameraDragManager.Disabled = true;
+            seedDropper.InstantiateSeed(selectedSeed);
 
-        //instantiate seed
-        seedDropper.InstantiateSeed(selectedSeed);
-
-    }
-        
-    public void OnSeedDragged()
-    {
-        Debug.Log("Drag");
-
-        //move seed positions
+            seedButtonIcon.sprite = cancelIcon;
+        }
     }
 
     public void OnSeedDropped()
     {
-        //check area
-
-        Debug.Log("Drop");
         cameraDragManager.Disabled = false;
+
+        seedButtonIcon.sprite = seedIcon;
+        
         seedDropper.DropSeed();
+    }
+
+    public void OnCancelButtonClicked()
+    {
+        seedDropper.DestroySeed();
+        seedButtonIcon.sprite = seedIcon;
     }
 
     #endregion

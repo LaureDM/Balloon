@@ -15,12 +15,20 @@ public class SeedDropperScript : MonoBehaviour {
 
     private GameObject instantiatedSeed;
 
+    private PineTreeSeedScript seedScript;
     private bool isDragging;
     private bool isSafeToDrop;
+    private InventoryManager inventoryManager;
+    private TreeType instantiatedTreeType;
 
     #endregion
 
     #region Unity Methods
+
+    public void Start()
+    {
+        inventoryManager = FindObjectOfType<InventoryManager>();
+    }
 
     public void Update()
     {
@@ -39,16 +47,15 @@ public class SeedDropperScript : MonoBehaviour {
                 if (hit.collider.gameObject.GetComponent<TerrainScript>())
                 {
                     isSafeToDrop = true;
-                    
-                    //TODO show an indication at the point so user can see where the seed will drop
-
-                    Vector3 seedPosition = new Vector3(hit.point.x, hit.point.y + 10, hit.point.z);
-                    instantiatedSeed.transform.position = seedPosition;
                 }
                 else
                 {
                     isSafeToDrop = false;
                 }
+
+                Vector3 seedPosition = new Vector3(hit.point.x, hit.point.y + 10, hit.point.z);
+                instantiatedSeed.transform.position = seedPosition;
+                seedScript.SetIsSafeToDrop(isSafeToDrop);
             }
             //seed dragging is out of bounds, cancel the seed drag
             else
@@ -83,16 +90,20 @@ public class SeedDropperScript : MonoBehaviour {
         }
 
         instantiatedSeed = Instantiate (prefab, gameObject.transform.position, gameObject.transform.rotation) as GameObject;
+        seedScript = instantiatedSeed.GetComponentInChildren<PineTreeSeedScript>();
+        instantiatedTreeType = treeType;
+
         instantiatedSeed.transform.parent = transform;
         isDragging = true;
     }
 
     public void DropSeed()
     {
-        if (isSafeToDrop)
+        if (isSafeToDrop && instantiatedSeed != null)
         {
-            instantiatedSeed = null;
+            seedScript.TurnOffProjector();
             isDragging = false;
+            inventoryManager.DecreaseSeedCount(instantiatedTreeType);
         }
         else
         {
@@ -102,7 +113,12 @@ public class SeedDropperScript : MonoBehaviour {
 
     public void DestroySeed()
     {
-        
+        if (instantiatedSeed != null)
+        {
+            isDragging = false;
+            Destroy(instantiatedSeed);
+            instantiatedSeed = null;
+        }
     }
 
     #endregion
