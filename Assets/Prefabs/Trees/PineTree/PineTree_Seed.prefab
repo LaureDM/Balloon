@@ -19,6 +19,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4000010129843956}
+  - component: {fileID: 114202792422247884}
   m_Layer: 0
   m_Name: PineTree_Seed
   m_TagString: Untagged
@@ -149,11 +150,25 @@ BoxCollider:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1000014282179770}
   m_Material: {fileID: 0}
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 0.026168417, y: 0.010541096, z: 0.011352636}
   m_Center: {x: -0.0029685646, y: 0.000010285294, z: 0.006002656}
+--- !u!114 &114202792422247884
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000011772256070}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c4b9566a32a9a405ab9d4f9fa934c84c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  projector: {fileID: 119755159894028952}
+  materialGreen: {fileID: 2100000, guid: c6f80deedf5794da49bfb9165d237d0b, type: 2}
+  materialRed: {fileID: 2100000, guid: da909b915c7964f37b097913f1f95f2a, type: 2}
 --- !u!119 &119755159894028952
 Projector:
   m_ObjectHideFlags: 1

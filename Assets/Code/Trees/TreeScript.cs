@@ -1,10 +1,11 @@
-﻿﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using AssemblyCSharp.Code.Enums;
-using AssemblyCSharp.Code.Trees;
 using AssemblyCSharp.Code.Controllers;
+using System.Collections.Generic;
+using System.Linq;
 
-public class PineTreeScript : MonoBehaviour, ITree
+public class TreeScript : MonoBehaviour
 {
     #region Constants
 
@@ -15,13 +16,13 @@ public class PineTreeScript : MonoBehaviour, ITree
     #region Editor Fields
 
     [SerializeField]
-    private GameObject[] growStages;
+    private GrowstageDictionary growStages;
 
     [SerializeField]
-    private GameObject[] animals;
+    private GrowstageDurationDictionary growStageDurations;
 
     [SerializeField]
-    private float timeTillNextStage;
+    private AnimalPercentageDictionary possibleAnimals;
 
     [SerializeField]
     private float timeTillNextAnimal;
@@ -30,13 +31,10 @@ public class PineTreeScript : MonoBehaviour, ITree
     private float timeTillNextFruit;
 
     [SerializeField]
-    private GameObject[] fruits;
+    private FruitType fruit;
 
     [SerializeField]
-    private FruitSpawnPosition[] fruitSpawnPositions;
-
-    [SerializeField]
-    private GameObject seed;
+    private FruitSpawnPosition fruitSpawnPosition;
 
     [SerializeField]
     private GameObject leavesParticlesPrefab;
@@ -49,28 +47,37 @@ public class PineTreeScript : MonoBehaviour, ITree
 
     private AnimalCollectionScript animalSpawner;
 
-    private Transform currentStagePrefab;
-    private GrowState currentStage = GrowState.SEED;
+    private Transform currentStageTransform;
+    private GrowState currentStage;
     private float startTime;
-    private float rabbitSpawnTime;
+    private float animalSpawnTime;
     private float fruitSpawnTime;
 
     private Rigidbody rigidBody;
 
-    //todo temporary
-    private bool isRabbitSpawned;
-
     private Vector3 terrainUp;
 
     private Vector3 treeScale;
+    private float currentDuration;
 
     #endregion
 
     #region Initialization
 
+    void Awake()
+    {
+        currentStage = GrowState.SEED;
+        growStageDurations.TryGetValue(currentStage, out currentDuration);
+        GameObject seedPrefab = null;
+        growStages.TryGetValue(currentStage, out seedPrefab);
+
+        GameObject seed = Instantiate(seedPrefab, transform.position, transform.rotation, gameObject.transform) as GameObject;
+        currentStageTransform = seed.transform;
+
+    }
+
     void Start()
     {
-        currentStagePrefab = seed.transform;
         rigidBody = GetComponent<Rigidbody>();
         animalSpawner = FindObjectOfType<AnimalCollectionScript>();
         treeCollection = FindObjectOfType<TreeCollectionScript>();
@@ -88,11 +95,12 @@ public class PineTreeScript : MonoBehaviour, ITree
             GrowToNextStage();
         }
         //when adult, spawn animals
-        else if (currentStage == GrowState.ADULT && ShouldSpawnRabbit())
+        else if (currentStage == GrowState.ADULT && ShouldSpawnAnimal())
         {
-            isRabbitSpawned = true;
-            animalSpawner.SpawnAnimal(Animal.RABBIT);
-            rabbitSpawnTime = Time.time;
+            Animal animal = CalculateAnimalToSpawn();
+            Debug.Log(animal);
+            animalSpawner.SpawnAnimal(animal);
+            animalSpawnTime = Time.time;
         }
         //when adult, drop fruits
         else if (currentStage == GrowState.ADULT && ShouldSpawnFruit())
@@ -131,7 +139,7 @@ public class PineTreeScript : MonoBehaviour, ITree
 
     private bool IsReadyToGrow()
     {
-        return (Time.time - startTime) > timeTillNextStage;
+        return (Time.time - startTime) > currentDuration;
     }
 
     public bool IsAdult()
@@ -148,29 +156,28 @@ public class PineTreeScript : MonoBehaviour, ITree
             case GrowState.SEED:
 
                 currentStage = GrowState.SEEDLING;
-                newStagePrefab = growStages[0];
                 break;
 
             case GrowState.SEEDLING:
 
                 currentStage = GrowState.SAPLING;
-                newStagePrefab = growStages[1];
                 break;
 
             case GrowState.SAPLING:
 
                 currentStage = GrowState.ADULT;
-                newStagePrefab = growStages[2];
                 break;
         }
 
+        growStages.TryGetValue(currentStage, out newStagePrefab);
+        growStageDurations.TryGetValue(currentStage, out currentDuration);
         startTime = Time.time;
         StartCoroutine(ChangeTree(newStagePrefab));
     }
 
-    private bool ShouldSpawnRabbit()
+    private bool ShouldSpawnAnimal()
     {
-        return (Time.time - rabbitSpawnTime) > timeTillNextAnimal && !isRabbitSpawned;
+        return (Time.time - animalSpawnTime) > timeTillNextAnimal;
     }
 
     private bool ShouldSpawnFruit()
@@ -180,14 +187,30 @@ public class PineTreeScript : MonoBehaviour, ITree
 
     void TryToSpawnFruit()
     {
-        foreach (FruitSpawnPosition fruitSpawnPosition in fruitSpawnPositions)
+        if (!fruitSpawnPosition.IsFruitSpawned())
         {
-            if (!fruitSpawnPosition.IsFruitSpawned())
+            fruitSpawnPosition.SpawnFruit(fruit);
+            fruitSpawnTime = Time.time;
+        }
+    }
+
+    private Animal CalculateAnimalToSpawn()
+    {
+        int randomNumber = Random.Range(0, 100);
+        int percentage = 0;
+
+        foreach (KeyValuePair<Animal, int> entry in possibleAnimals)
+        {
+            percentage += entry.Value;
+
+            if (randomNumber <= percentage)
             {
-                fruitSpawnPosition.SpawnFruit(FruitType.APPLE);
-                fruitSpawnTime = Time.time;
+                return entry.Key;
             }
         }
+
+        //if for some reason something goes wrong, return the first animal possible
+        return possibleAnimals.First().Key;
     }
 
     #endregion
@@ -198,32 +221,32 @@ public class PineTreeScript : MonoBehaviour, ITree
     {
         float normalizedScale = treeScale.normalized.magnitude;
         float scaleSpeed = 6f;
-
+        
         for (float s = normalizedScale; s >= 0; s-=Time.deltaTime * scaleSpeed)
         {
-            currentStagePrefab.transform.localScale = new Vector3(s, s, s);
+            currentStageTransform.transform.localScale = new Vector3(s, s, s);
             yield return new WaitForEndOfFrame();
         }
 
-        currentStagePrefab.transform.localScale = Vector3.zero;
+        currentStageTransform.transform.localScale = Vector3.zero;
 
-        Destroy(currentStagePrefab.gameObject);
+        Destroy(currentStageTransform.gameObject);
 
         GameObject treeStage = Instantiate(newStagePrefab, transform.position, transform.rotation) as GameObject;
         
-        currentStagePrefab = treeStage.transform;
-        currentStagePrefab.parent = gameObject.transform;
-        currentStagePrefab.transform.up = terrainUp;
+        currentStageTransform = treeStage.transform;
+        currentStageTransform.parent = gameObject.transform;
+        currentStageTransform.transform.up = terrainUp;
 
         for (float s = 0f; s < normalizedScale; s += Time.deltaTime * scaleSpeed)
         {
-            currentStagePrefab.transform.localScale = new Vector3(s, s, s);
+            currentStageTransform.transform.localScale = new Vector3(s, s, s);
             yield return new WaitForEndOfFrame();
         }
 
-        currentStagePrefab.transform.localScale = treeScale;
+        currentStageTransform.transform.localScale = treeScale;
 
-        float particleHeight = (transform.position.y + currentStagePrefab.GetComponentInChildren<Collider>().bounds.size.y)/2;
+        float particleHeight = (transform.position.y + currentStageTransform.GetComponentInChildren<Collider>().bounds.size.y)/2;
         Vector3 particlesPosition = new Vector3(transform.position.x, particleHeight, transform.position.z);
 
         GameObject particles = Instantiate(leavesParticlesPrefab, particlesPosition, transform.rotation) as GameObject;

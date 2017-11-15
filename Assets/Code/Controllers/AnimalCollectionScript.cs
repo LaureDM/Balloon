@@ -8,7 +8,7 @@ public class AnimalCollectionScript : MonoBehaviour {
     #region Editor Fields
 
     [SerializeField]
-    private GameObject rabbitPrefab;
+    private AnimalPrefabDictionary animals;
 
     #endregion
 
@@ -36,17 +36,15 @@ public class AnimalCollectionScript : MonoBehaviour {
     {
         GameObject prefab = null;
 
-        switch(animal)
+        animals.TryGetValue(animal, out prefab);
+
+        if (prefab != null)
         {
-            case Animal.RABBIT:
-                prefab = rabbitPrefab;
-                break;
+            GameObject animalObject = Instantiate(prefab, transform.position, transform.rotation) as GameObject;
+            animalObject.transform.parent = gameObject.transform;
+            IncreaseAnimalCount(animal);
         }
 
-        GameObject animalObject = Instantiate(prefab, transform.position, transform.rotation) as GameObject;
-        animalObject.transform.parent = gameObject.transform;
-
-        IncreaseAnimalCount(animal);
 	}
 
     private void IncreaseAnimalCount(Animal animal)
