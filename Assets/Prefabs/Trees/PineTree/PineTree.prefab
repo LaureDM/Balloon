@@ -123,8 +123,8 @@ MonoBehaviour:
     m_keys: 010000000200000003000000
     m_values:
     - 20
-    - 20
-    - 20
+    - 40
+    - 60
   possibleAnimals:
     m_keys: 0000000001000000
     m_values: 460000001e000000
@@ -132,6 +132,5 @@ MonoBehaviour:
   timeTillNextFruit: 20
   fruit: 1
   fruitSpawnPosition: {fileID: 114184087366120582}
-  seed: {fileID: 0}
   leavesParticlesPrefab: {fileID: 1163563870711770, guid: 803442ffd14f863478f4d366cfd614c7,
     type: 2}
