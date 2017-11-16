@@ -17,7 +17,7 @@ public class AnimalCollectionScript : MonoBehaviour {
     /*
      *  discovered animals with their count in the forest
      */
-    private Dictionary<Animal, int> animalDictionary;
+    private Dictionary<AnimalType, int> animalDictionary;
 
     #endregion
 
@@ -25,14 +25,14 @@ public class AnimalCollectionScript : MonoBehaviour {
 
     void Start ()
     {
-        animalDictionary = new Dictionary<Animal, int>();
+        animalDictionary = new Dictionary<AnimalType, int>();
 	}
 
     #endregion
 
     #region Helper Methods
 
-    public void SpawnAnimal(Animal animal)
+    public void SpawnAnimal(AnimalType animal)
     {
         GameObject prefab = null;
 
@@ -47,7 +47,7 @@ public class AnimalCollectionScript : MonoBehaviour {
 
 	}
 
-    private void IncreaseAnimalCount(Animal animal)
+    private void IncreaseAnimalCount(AnimalType animal)
     {
         if (animalDictionary.ContainsKey(animal))
         {

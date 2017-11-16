@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
+using AssemblyCSharp.Code.Enums;
 
-public class PineConeScript : MonoBehaviour {
+public class Fruit : MonoBehaviour {
 
     #region Delegates
 
@@ -10,6 +11,11 @@ public class PineConeScript : MonoBehaviour {
 
     #endregion
 
+    #region 
+
+    public FruitType FruitType;
+
+    #endregion
     #region Helper Methods
 
     public void SetEaten()

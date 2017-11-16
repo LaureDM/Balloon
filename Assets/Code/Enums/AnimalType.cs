@@ -1,7 +1,7 @@
 ﻿using System;
 namespace AssemblyCSharp.Code.Enums
 {
-    public enum Animal
+    public enum AnimalType
     {
         Rabbit,
         Squirrel,

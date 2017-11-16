@@ -97,7 +97,7 @@ public class TreeScript : MonoBehaviour
         //when adult, spawn animals
         else if (currentStage == GrowState.ADULT && ShouldSpawnAnimal())
         {
-            Animal animal = CalculateAnimalToSpawn();
+            AnimalType animal = CalculateAnimalToSpawn();
             Debug.Log(animal);
             animalSpawner.SpawnAnimal(animal);
             animalSpawnTime = Time.time;
@@ -194,12 +194,12 @@ public class TreeScript : MonoBehaviour
         }
     }
 
-    private Animal CalculateAnimalToSpawn()
+    private AnimalType CalculateAnimalToSpawn()
     {
         int randomNumber = Random.Range(0, 100);
         int percentage = 0;
 
-        foreach (KeyValuePair<Animal, int> entry in possibleAnimals)
+        foreach (KeyValuePair<AnimalType, int> entry in possibleAnimals)
         {
             percentage += entry.Value;
 

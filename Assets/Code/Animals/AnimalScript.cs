@@ -1,28 +1,31 @@
 ﻿﻿﻿using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using AssemblyCSharp.Code.Enums;
 using UnityEngine;
 
-public class RabbitScript : MonoBehaviour
+public class AnimalScript : MonoBehaviour
 {
     #region Editor Fields
 
     /*
-     * The fruits this animal can eat
+     * The fruits this animal eats
      */
     [SerializeField]
-    private GameObject[] fruits;
+    private List<FruitType> fruits;
 
 
     /*
      * The types of trees the animal is attracted by
      */
     [SerializeField]
-    private TreeType[] treeTypes;
+    private List<TreeType> treeTypes;
 
     /*
      * The seeds the animal can drop
      */
     [SerializeField]
-    private GameObject[] seeds;
+    private SeedPercentageDictionary seeds;
     
     /*
      * Indicates how long an animal can survive without trees
@@ -40,9 +43,9 @@ public class RabbitScript : MonoBehaviour
 
     #region Fields
 
-    private GameObject terrain;
+    private Terrain terrain;
     private Vector3 currentTarget;
-    private PineConeScript currentFruitTarget;
+    private Fruit currentFruitTarget;
 
     private UnityEngine.AI.NavMeshAgent navMeshAgent;
 
@@ -64,9 +67,9 @@ public class RabbitScript : MonoBehaviour
 
     void Start()
     {
-        terrain = GameObject.FindWithTag("Terrain");
+        terrain = FindObjectOfType<Terrain>();
 
-        Bounds bounds = terrain.GetComponent<Collider>().bounds;
+        Bounds bounds = terrain.gameObject.GetComponent<Collider>().bounds;
 
         terrainTargetBoundX = (bounds.size.x - 5f)/2;
         terrainTargetBoundZ = (bounds.size.z - 5f)/2;
@@ -100,8 +103,8 @@ public class RabbitScript : MonoBehaviour
         if (Vector3.Distance(transform.position, navMeshAgent.destination) > 1.0f || isGoingTowardsFood)
         {
             navMeshAgent.SetDestination(currentTarget);
-		}
-        else
+		} 
+        else 
         {
 			StartCoroutine(Rest());
 		}
@@ -116,16 +119,20 @@ public class RabbitScript : MonoBehaviour
     private void OnCollisionEnter(Collision collision)
     {
         GameObject bumpedObject = collision.collider.gameObject;
-        Transform parent = bumpedObject.transform.parent;
+        Fruit fruitScript = bumpedObject.GetComponentInParent<Fruit>();
 
         //if animal bumps into fruit he eats it 
-        if (parent != null && parent.gameObject.GetComponent<PineConeScript>())
+        if (fruitScript != null)
         {
-            //TODO check if fruit is fruit he wants
+            //check if fruit is fruit he wants
+            if (!fruits.Contains(fruitScript.FruitType))
+            {
+                return;
+            }
+
             ateFruit = true;
-            PineConeScript pineCone = parent.gameObject.GetComponent<PineConeScript>();
             isGoingTowardsFood = false;
-            StartCoroutine(EatFruit(pineCone));
+            StartCoroutine(EatFruit(fruitScript));
         }
         else
         {
@@ -171,16 +178,20 @@ public class RabbitScript : MonoBehaviour
         foreach (Collider fruit in hitColliders)
         {
             Transform parent = fruit.transform.parent;
-            if (parent != null && parent.gameObject.GetComponent<PineConeScript>())
+            Fruit fruitScript = fruit.GetComponentInParent<Fruit>();
+            if (fruitScript != null)
             {
-                //TODO check if fruit is of interest
-                PineConeScript pineCone = parent.GetComponent<PineConeScript>();
-
+                //check if fruit is of interest
+                if (!fruits.Contains(fruitScript.FruitType))
+                {
+                    return;
+                }
+                
                 //subscribe to event
-                pineCone.OnEaten += OnFruitEaten;
+                fruitScript.OnEaten += OnFruitEaten;
 
                 currentTarget = parent.transform.position;
-                currentFruitTarget = pineCone;
+                currentFruitTarget = fruitScript;
 
                 isGoingTowardsFood = true;
 			    navMeshAgent.SetDestination(currentTarget);
@@ -197,8 +208,8 @@ public class RabbitScript : MonoBehaviour
      */
     public void OnFruitEaten(GameObject fruit)
     {
-        PineConeScript pineCone = fruit.GetComponent<PineConeScript>();
-        pineCone.OnEaten -= OnFruitEaten;
+        Fruit fruitScript = fruit.GetComponent<Fruit>();
+        fruitScript.OnEaten -= OnFruitEaten;
         currentFruitTarget = null;
         FindNewTarget();
     }
@@ -217,12 +228,32 @@ public class RabbitScript : MonoBehaviour
     {
         PauseNavMeshAgent();
 
-        //TODO calculate random seed
         StartCoroutine(seedDropEffectScript.CreateEffect());
 
-        inventoryManager.IncreaseSeedCount(TreeType.PINE_TREE);
+        TreeType type = CalculateSeed();
+
+        inventoryManager.IncreaseSeedCount(type);
 
         UnPauseNavMeshAgent();
+    }
+
+    public TreeType CalculateSeed()
+    {
+        int randomNumber = Random.Range(0, 100);
+        int percentage = 0;
+
+        foreach (KeyValuePair<TreeType, int> entry in seeds)
+        {
+            percentage += entry.Value;
+
+            if (randomNumber <= percentage)
+            {
+                return entry.Key;
+            }
+        }
+
+        //if for some reason something goes wrong, return the first animal possible
+        return seeds.First().Key;    
     }
 
     #endregion
@@ -247,7 +278,7 @@ public class RabbitScript : MonoBehaviour
 		isResting = false;
 	}
 
-    IEnumerator EatFruit(PineConeScript pineCone)
+    IEnumerator EatFruit(Fruit fruit)
     {
         if (isEating)
         {
@@ -261,7 +292,7 @@ public class RabbitScript : MonoBehaviour
 
         yield return new WaitForSeconds(3);
 
-        pineCone.SetEaten();
+        fruit.SetEaten();
 
         isEating = false;
     }

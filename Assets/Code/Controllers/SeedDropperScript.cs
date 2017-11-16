@@ -91,7 +91,6 @@ public class SeedDropperScript : MonoBehaviour {
 
         instantiatedSeed = Instantiate (prefab, gameObject.transform.position, gameObject.transform.rotation) as GameObject;
         seedScript = instantiatedSeed.GetComponentInChildren<PineTreeSeedScript>();
-        Debug.Log(instantiatedSeed.name);
         instantiatedTreeType = treeType;
 
         instantiatedSeed.transform.parent = transform;

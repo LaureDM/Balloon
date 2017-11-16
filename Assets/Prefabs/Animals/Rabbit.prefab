@@ -19,9 +19,9 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4000013022017786}
-  - component: {fileID: 114000011930895766}
   - component: {fileID: 195000012470282966}
   - component: {fileID: 54000011608203548}
+  - component: {fileID: 114495388714665554}
   m_Layer: 0
   m_Name: Rabbit
   m_TagString: Untagged
@@ -113,6 +113,7 @@ MeshRenderer:
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
@@ -128,6 +129,7 @@ MeshRenderer:
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
+  m_StitchLightmapSeams: 0
   m_SelectedEditorRenderState: 3
   m_MinimumChartSize: 4
   m_AutoUVMaxDistance: 0.5
@@ -170,7 +172,7 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.020031497, y: 0.086768344, z: 0.08614616}
   m_Center: {x: 0.00019354, y: 0.00392484, z: 0.04336649}
---- !u!114 &114000011930895766
+--- !u!114 &114495388714665554
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -178,15 +180,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 1000013428927948}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3f8fb9e1837e1496b93d3701de3e2d71, type: 3}
+  m_Script: {fileID: 11500000, guid: bed374df764904838b37473accb1e10a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fruits: []
-  treeTags:
-  - PineTree
-  seeds: []
-  durationWithoutTrees: 30
-  timeTillSeedDrops: 10
+  fruits: 01000000
+  treeTypes: 00000000
+  seeds:
+    m_keys: 0000000001000000
+    m_values: 280000003c000000
+  durationWithoutTrees: 60
+  timeTillSeedDrops: 30
   seedDropEffectScript: {fileID: 114892860899521194}
 --- !u!114 &114892860899521194
 MonoBehaviour:

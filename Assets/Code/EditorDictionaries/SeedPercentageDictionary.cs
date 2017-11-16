@@ -4,7 +4,7 @@ using AssemblyCSharp.Code.Enums;
 using System;
 
 [Serializable]
-public class AnimalPercentageDictionary : SerializableDictionary<AnimalType, int>
+public class SeedPercentageDictionary : SerializableDictionary<TreeType, int>
 {
 
 }

@@ -122,9 +122,9 @@ MonoBehaviour:
   growStageDurations:
     m_keys: 010000000200000003000000
     m_values:
-    - 20
-    - 40
-    - 60
+    - 10
+    - 10
+    - 10
   possibleAnimals:
     m_keys: 0000000001000000
     m_values: 460000001e000000
