@@ -65,7 +65,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1597163216239986}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.41000003, z: 4.51}
+  m_LocalPosition: {x: 0, y: 0, z: 4.51}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4093519031013046}
@@ -102,14 +102,14 @@ MonoBehaviour:
     m_values:
     - {fileID: 1000012066896288, guid: 89d0f6dac531e4d889ab392801a14ed1, type: 2}
     - {fileID: 1000011563256864, guid: 0fedd56d1909046c186eac32fcc80899, type: 2}
-    - {fileID: 1000011316788818, guid: d104d00d2726c462fb803e6fb6307459, type: 2}
+    - {fileID: 1669562728023184, guid: 936d6985899a643b0bf44293a87417c6, type: 2}
     - {fileID: 1000011772256070, guid: 88fc5e9dc00ca4fba9857e0d1e679ff6, type: 2}
   growStageDurations:
     m_keys: 010000000200000003000000
     m_values:
-    - 20
-    - 20
-    - 20
+    - 10
+    - 10
+    - 10
   possibleAnimals:
     m_keys: 0000000001000000
     m_values: 460000001e000000
@@ -132,5 +132,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pineconePrefab: {fileID: 1130671022595372, guid: 66977a6e32974d74cb7c0297f00cbfb1,
     type: 2}
-  applePrefab: {fileID: 1130671022595372, guid: 66977a6e32974d74cb7c0297f00cbfb1,
+  applePrefab: {fileID: 1730129516551682, guid: 3cd9e8760a141433a82bf174fa7af0c4,
     type: 2}

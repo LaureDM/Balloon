@@ -30,6 +30,15 @@ public class GameHudScreenManager : MonoBehaviour
     [SerializeField]
     private GameObject counter;
 
+    [SerializeField]
+    private Button nextButton;
+
+    [SerializeField]
+    private Button previousButton;
+
+    [SerializeField]
+    private Text selectedTreeText;
+
     #endregion
 
     #region Fields
@@ -58,10 +67,26 @@ public class GameHudScreenManager : MonoBehaviour
         seedButtonIcon.sprite = seedIcon;
     }
 
-    // Update is called once per frame
     void Update()
     {
-        
+        //hide or show arrow keys
+        if (inventoryManager.Seeds.First().Key == selectedSeed)
+        {
+            previousButton.gameObject.SetActive(false);
+        }
+        else
+        {
+            previousButton.gameObject.SetActive(true);
+        }
+
+        if (inventoryManager.Seeds.Last().Key == selectedSeed)
+        {
+            nextButton.gameObject.SetActive(false);
+        }
+        else
+        {
+            nextButton.gameObject.SetActive(true);
+        }
     }
 
     #region Helper Methods
@@ -69,6 +94,7 @@ public class GameHudScreenManager : MonoBehaviour
     public void InitializeSeedButton()
     {
         //TODO change image
+        selectedTreeText.text = TreeTypeMapper.GetStringValue(selectedSeed);
         UpdateCount(selectedSeed);
         CheckInteractable();
     }
@@ -79,7 +105,6 @@ public class GameHudScreenManager : MonoBehaviour
         inventoryManager.Seeds.TryGetValue(type, out count);
         seedCount.text = count.ToString();
     }
-
     private void CheckInteractable()
     {
         if (inventoryManager.CanInstantiateSeed(selectedSeed))
@@ -113,12 +138,14 @@ public class GameHudScreenManager : MonoBehaviour
 
     public void OnRightArrowClicked()
     {
-        //TODO
+        selectedSeed = inventoryManager.Seeds.Keys.ToList()[inventoryManager.GetIndexOfKey(selectedSeed) + 1];
+        InitializeSeedButton();
     }
 
     public void OnLeftArrowClicked()
     {
-        //TODO
+        selectedSeed = inventoryManager.Seeds.Keys.ToList()[inventoryManager.GetIndexOfKey(selectedSeed) - 1];
+        InitializeSeedButton();
     }
 
     public void OnStartDrag()

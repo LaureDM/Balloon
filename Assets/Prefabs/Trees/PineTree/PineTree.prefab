@@ -65,7 +65,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1518208793316992}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.41000003, z: 4.51}
+  m_LocalPosition: {x: 0, y: 0, z: 4.51}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4000010735539320}
@@ -99,7 +99,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pineconePrefab: {fileID: 1130671022595372, guid: 66977a6e32974d74cb7c0297f00cbfb1,
     type: 2}
-  applePrefab: {fileID: 1130671022595372, guid: 66977a6e32974d74cb7c0297f00cbfb1,
+  applePrefab: {fileID: 1730129516551682, guid: 3cd9e8760a141433a82bf174fa7af0c4,
     type: 2}
 --- !u!114 &114642949097472118
 MonoBehaviour:
@@ -128,8 +128,8 @@ MonoBehaviour:
   possibleAnimals:
     m_keys: 0000000001000000
     m_values: 460000001e000000
-  timeTillNextAnimal: 60
-  timeTillNextFruit: 20
+  timeTillNextAnimal: 10
+  timeTillNextFruit: 10
   fruit: 1
   fruitSpawnPosition: {fileID: 114184087366120582}
   leavesParticlesPrefab: {fileID: 1163563870711770, guid: 803442ffd14f863478f4d366cfd614c7,

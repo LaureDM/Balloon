@@ -128,6 +128,7 @@ public class TreeScript : MonoBehaviour
 
             Vector3 treeRotation = new Vector3(0, randomY, 0);
             gameObject.transform.Rotate(treeRotation);
+            gameObject.transform.position = new Vector3(transform.position.x, 0, transform.position.z);
 
             GrowToNextStage();
         }
