@@ -7,6 +7,9 @@ public class SeedDropperScript : MonoBehaviour {
     [SerializeField]
     private TreeDictionary trees;
 
+    #endregion
+
+    #region Fields
     private GameObject instantiatedSeed;
 
     private SeedScript seedScript;
@@ -73,7 +76,7 @@ public class SeedDropperScript : MonoBehaviour {
         {
             return;
         }
-        
+
         instantiatedSeed = Instantiate (prefab, gameObject.transform.position, gameObject.transform.rotation) as GameObject;
         seedScript = instantiatedSeed.GetComponentInChildren<SeedScript>();
         instantiatedTreeType = treeType;
