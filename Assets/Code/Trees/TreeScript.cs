@@ -31,9 +31,6 @@ public class TreeScript : MonoBehaviour
     private float timeTillNextFruit;
 
     [SerializeField]
-    private FruitType fruit;
-
-    [SerializeField]
     private FruitSpawnPosition fruitSpawnPosition;
 
     [SerializeField]
@@ -190,7 +187,7 @@ public class TreeScript : MonoBehaviour
     {
         if (!fruitSpawnPosition.IsFruitSpawned())
         {
-            fruitSpawnPosition.SpawnFruit(fruit);
+            fruitSpawnPosition.SpawnFruit();
             fruitSpawnTime = Time.time;
         }
     }

@@ -5,17 +5,11 @@ public class SeedDropperScript : MonoBehaviour {
     #region Editor Fields
 
     [SerializeField]
-    private GameObject pineTreeSeedPrefab;
-
-    [SerializeField]
-    private GameObject oakTreeSeedPrefab;
-
-    [SerializeField]
-    private GameObject appleTreeSeedPrefab;
+    private TreeDictionary trees;
 
     private GameObject instantiatedSeed;
 
-    private PineTreeSeedScript seedScript;
+    private SeedScript seedScript;
     private bool isDragging;
     private bool isSafeToDrop;
     private InventoryManager inventoryManager;
@@ -73,24 +67,15 @@ public class SeedDropperScript : MonoBehaviour {
     public void InstantiateSeed(TreeType treeType)
     {
         GameObject prefab = null;
+        trees.TryGetValue(treeType, out prefab);
 
-        switch (treeType) 
+        if (prefab == null)
         {
-            case TreeType.APPLE_TREE:
-                prefab = appleTreeSeedPrefab;
-                break;
-
-            case TreeType.OAK:
-                prefab = oakTreeSeedPrefab;
-                break;
-
-            case TreeType.PINE_TREE:
-                prefab = pineTreeSeedPrefab;
-                break;
+            return;
         }
-
+        
         instantiatedSeed = Instantiate (prefab, gameObject.transform.position, gameObject.transform.rotation) as GameObject;
-        seedScript = instantiatedSeed.GetComponentInChildren<PineTreeSeedScript>();
+        seedScript = instantiatedSeed.GetComponentInChildren<SeedScript>();
         instantiatedTreeType = treeType;
 
         instantiatedSeed.transform.parent = transform;

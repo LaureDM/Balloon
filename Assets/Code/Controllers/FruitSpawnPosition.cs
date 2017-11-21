@@ -8,31 +8,15 @@ namespace AssemblyCSharp.Code.Controllers
         #region Editor Fields
 
         [SerializeField]
-		private GameObject pineconePrefab;
-
-		[SerializeField]
-		private GameObject applePrefab;
+		private GameObject fruitPrefab;
 
         #endregion
 
         #region Helper Methods
 
-        public void SpawnFruit(FruitType fruitType)
+        public void SpawnFruit()
         {
-            GameObject prefab = null;
-
-            switch (fruitType)
-            {
-                case FruitType.APPLE:
-                    prefab = applePrefab;
-                    break;
-
-                case FruitType.PINECONE:
-                    prefab = pineconePrefab;
-                    break;
-            }
-
-            GameObject fruit = Instantiate(prefab, transform.position, transform.rotation) as GameObject;
+            GameObject fruit = Instantiate(fruitPrefab, transform.position, transform.rotation) as GameObject;
             fruit.transform.parent = gameObject.transform;
         }
 
