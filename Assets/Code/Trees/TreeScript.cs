@@ -31,9 +31,6 @@ public class TreeScript : MonoBehaviour
     private float timeTillNextFruit;
 
     [SerializeField]
-    private FruitType fruit;
-
-    [SerializeField]
     private FruitSpawnPosition fruitSpawnPosition;
 
     [SerializeField]
@@ -135,6 +132,7 @@ public class TreeScript : MonoBehaviour
 
             Vector3 treeRotation = new Vector3(0, randomY, 0);
             gameObject.transform.Rotate(treeRotation);
+            gameObject.transform.position = new Vector3(transform.position.x, 0, transform.position.z);
 
             GrowToNextStage();
         }
@@ -197,7 +195,7 @@ public class TreeScript : MonoBehaviour
     {
         if (!fruitSpawnPosition.IsFruitSpawned())
         {
-            fruitSpawnPosition.SpawnFruit(fruit);
+            fruitSpawnPosition.SpawnFruit();
             fruitSpawnTime = Time.time;
         }
     }
