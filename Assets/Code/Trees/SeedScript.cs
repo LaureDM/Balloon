@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PineTreeSeedScript : MonoBehaviour {
+public class SeedScript : MonoBehaviour {
 
 	#region Editor Fields
 

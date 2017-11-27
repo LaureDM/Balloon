@@ -82,6 +82,7 @@ MeshRenderer:
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
@@ -97,6 +98,7 @@ MeshRenderer:
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
+  m_StitchLightmapSeams: 0
   m_SelectedEditorRenderState: 3
   m_MinimumChartSize: 4
   m_AutoUVMaxDistance: 0.5
@@ -132,9 +134,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 1130671022595372}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3fb6b26857a004a039e8c0689052feef, type: 3}
+  m_Script: {fileID: 11500000, guid: 049aea483a2914e18a272a1e5841f1ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  FruitType: 1
 --- !u!208 &208115548492138224
 NavMeshObstacle:
   m_ObjectHideFlags: 1

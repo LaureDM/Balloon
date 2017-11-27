@@ -14,7 +14,6 @@ public class AnimalScript : MonoBehaviour
     [SerializeField]
     private List<FruitType> fruits;
 
-
     /*
      * The types of trees the animal is attracted by
      */
@@ -43,7 +42,7 @@ public class AnimalScript : MonoBehaviour
 
     #region Fields
 
-    private Terrain terrain;
+    private TerrainScript terrain;
     private Vector3 currentTarget;
     private Fruit currentFruitTarget;
 
@@ -67,7 +66,7 @@ public class AnimalScript : MonoBehaviour
 
     void Start()
     {
-        terrain = FindObjectOfType<Terrain>();
+        terrain = FindObjectOfType<TerrainScript>();
 
         Bounds bounds = terrain.gameObject.GetComponent<Collider>().bounds;
 
@@ -182,20 +181,18 @@ public class AnimalScript : MonoBehaviour
             if (fruitScript != null)
             {
                 //check if fruit is of interest
-                if (!fruits.Contains(fruitScript.FruitType))
+                if (fruits.Contains(fruitScript.FruitType))
                 {
+                    //subscribe to event
+                    fruitScript.OnEaten += OnFruitEaten;
+
+                    currentTarget = parent.transform.position;
+                    currentFruitTarget = fruitScript;
+
+                    isGoingTowardsFood = true;
+                    navMeshAgent.SetDestination(currentTarget);
                     return;
-                }
-                
-                //subscribe to event
-                fruitScript.OnEaten += OnFruitEaten;
-
-                currentTarget = parent.transform.position;
-                currentFruitTarget = fruitScript;
-
-                isGoingTowardsFood = true;
-			    navMeshAgent.SetDestination(currentTarget);
-				return;
+                    }            
             }
         }
 

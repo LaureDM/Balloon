@@ -9,4 +9,5 @@ using UnityEditor;
 [CustomPropertyDrawer(typeof(AnimalPercentageDictionary))]
 [CustomPropertyDrawer(typeof(AnimalPrefabDictionary))]
 [CustomPropertyDrawer(typeof(SeedPercentageDictionary))]
+[CustomPropertyDrawer(typeof(TreeDictionary))]
 public class AnySerializableDictionaryPropertyDrawer : SerializableDictionaryPropertyDrawer {}

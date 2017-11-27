@@ -3,7 +3,11 @@ namespace AssemblyCSharp.Code.Enums
 {
     public enum FruitType
     {
-        APPLE,
-        PINECONE
+        Apple,
+        Pinecone,
+        Acorn,
+        Meatball,
+        Wallnut
+
     }
 }

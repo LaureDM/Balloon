@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 public class InventoryManager : MonoBehaviour
 {
@@ -21,6 +22,7 @@ public class InventoryManager : MonoBehaviour
 
         //TODO TEST CODE
         Seeds.Add(TreeType.PINE_TREE, 3);
+        Seeds.Add(TreeType.APPLE_TREE, 1);
     }
 
     // Use this for initialization
@@ -44,6 +46,11 @@ public class InventoryManager : MonoBehaviour
         {
             OnCountChanged(seed);
         }
+    }
+
+    public int GetIndexOfKey(TreeType seed)
+    {     
+        return Seeds.Keys.ToList().IndexOf(seed);
     }
 
     public bool CanInstantiateSeed(TreeType seed)
