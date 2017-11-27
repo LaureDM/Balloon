@@ -107,15 +107,14 @@ MonoBehaviour:
   growStageDurations:
     m_keys: 010000000200000003000000
     m_values:
-    - 10
-    - 10
-    - 10
+    - 3
+    - 3
+    - 3
   possibleAnimals:
     m_keys: 0000000001000000
     m_values: 460000001e000000
   timeTillNextAnimal: 40
   timeTillNextFruit: 15
-  fruit: 0
   fruitSpawnPosition: {fileID: 114840651656170146}
   leavesParticlesPrefab: {fileID: 1163563870711770, guid: 803442ffd14f863478f4d366cfd614c7,
     type: 2}

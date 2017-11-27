@@ -97,9 +97,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 22ab797dc94484267a65669dd9d0e7ed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pineconePrefab: {fileID: 1130671022595372, guid: 66977a6e32974d74cb7c0297f00cbfb1,
-    type: 2}
-  applePrefab: {fileID: 1730129516551682, guid: 3cd9e8760a141433a82bf174fa7af0c4,
+  fruitPrefab: {fileID: 1771402818297750, guid: 9c078626a13ee46fcaef7268ce0605e1,
     type: 2}
 --- !u!114 &114268623005438738
 MonoBehaviour:
@@ -115,9 +113,9 @@ MonoBehaviour:
   growStages:
     m_keys: 01000000020000000300000000000000
     m_values:
-    - {fileID: 1636752472998582, guid: 59cb45fd80a8a4730b9d355697f44afe, type: 2}
-    - {fileID: 1731659086756496, guid: e6a67c21950fc49df85eea2db8a0fa83, type: 2}
-    - {fileID: 1669562728023184, guid: 936d6985899a643b0bf44293a87417c6, type: 2}
+    - {fileID: 1853225730425342, guid: 2956f0243eb8249f0be73c942f0d2517, type: 2}
+    - {fileID: 1466146383074462, guid: acb74b17dbc64461595c27ae4d69bcfb, type: 2}
+    - {fileID: 1035344572872622, guid: 76c91ced66ca045209d7954eb3145d83, type: 2}
     - {fileID: 1000011772256070, guid: 88fc5e9dc00ca4fba9857e0d1e679ff6, type: 2}
   growStageDurations:
     m_keys: 010000000200000003000000
@@ -130,7 +128,6 @@ MonoBehaviour:
     m_values: 460000001e000000
   timeTillNextAnimal: 40
   timeTillNextFruit: 15
-  fruit: 0
   fruitSpawnPosition: {fileID: 114268571487535122}
   leavesParticlesPrefab: {fileID: 1163563870711770, guid: 803442ffd14f863478f4d366cfd614c7,
     type: 2}

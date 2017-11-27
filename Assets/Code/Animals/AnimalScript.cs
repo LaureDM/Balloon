@@ -14,7 +14,6 @@ public class AnimalScript : MonoBehaviour
     [SerializeField]
     private List<FruitType> fruits;
 
-
     /*
      * The types of trees the animal is attracted by
      */
