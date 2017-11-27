@@ -39,6 +39,9 @@ public class TreeScript : MonoBehaviour
     [SerializeField]
     private GameObject leavesParticlesPrefab;
 
+    [SerializeField]
+    private TreeType type;
+
     #endregion
 
     #region Fields
@@ -108,6 +111,9 @@ public class TreeScript : MonoBehaviour
             TryToSpawnFruit();
         }
 
+
+        //TODO write test code to check gone/restored events
+
     }
 
     public void OnCollisionEnter(Collision collider)
@@ -118,6 +124,7 @@ public class TreeScript : MonoBehaviour
             rigidBody.isKinematic = true;
 
             gameObject.transform.parent = treeCollection.gameObject.transform;
+            treeCollection.IncreaseTreeCount(type);
 
             terrainUp = collider.gameObject.transform.up;
 
@@ -166,6 +173,7 @@ public class TreeScript : MonoBehaviour
             case GrowState.SAPLING:
 
                 currentStage = GrowState.ADULT;
+                treeCollection.IncreaseAdultTreeCount(type);
                 break;
         }
 

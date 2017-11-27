@@ -61,15 +61,16 @@ public class AnimalCollectionScript : MonoBehaviour {
         }
     }
 
-    /*
-    public void DecreaseAnimalCount(Animal animal)
+    
+    public void DecreaseAnimalCount(AnimalType animal)
     {
-		if (animalDictionary.ContainsKey(animal) && animalDictionary.TryGetValue(animal, out int currentCount))
+        int currentCount = 0;
+
+		if (animalDictionary.ContainsKey(animal) && animalDictionary.TryGetValue(animal, out currentCount))
 		{
             animalDictionary[animal] = currentCount - 1 < 0 ? 0 : currentCount - 1;
 		}
     }
-    */
 
     #endregion
 
