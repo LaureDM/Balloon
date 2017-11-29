@@ -98,7 +98,6 @@ public class TreeScript : MonoBehaviour
         else if (currentStage == GrowState.ADULT && ShouldSpawnAnimal())
         {
             AnimalType animal = CalculateAnimalToSpawn();
-            Debug.Log(animal);
             animalSpawner.SpawnAnimal(animal);
             animalSpawnTime = Time.time;
         }
@@ -107,10 +106,6 @@ public class TreeScript : MonoBehaviour
         {
             TryToSpawnFruit();
         }
-
-
-        //TODO write test code to check gone/restored events
-
     }
 
     public void OnCollisionEnter(Collision collider)

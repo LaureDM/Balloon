@@ -36,6 +36,12 @@ namespace AssemblyCSharp.Code.Controllers
 
         #endregion
 
+        public void Start()
+        {
+            treeDictionary = new Dictionary<TreeType, int>();
+            adultTreeDictionary = new Dictionary<TreeType, int>();
+        }
+
         public void IncreaseTreeCount(TreeType tree)
         {
             if (treeDictionary.ContainsKey(tree))
@@ -68,7 +74,7 @@ namespace AssemblyCSharp.Code.Controllers
             }
             else
             {
-                treeDictionary.Add(tree, 1);
+                adultTreeDictionary.Add(tree, 1);
             }
         }
 

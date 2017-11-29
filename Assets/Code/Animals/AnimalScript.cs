@@ -381,7 +381,10 @@ public class AnimalScript : MonoBehaviour
 
         yield return new WaitForSeconds(3);
 
-        fruit.SetEaten();
+        if (fruit != null)
+        {
+            fruit.SetEaten();
+        }
 
         isEating = false;
     }

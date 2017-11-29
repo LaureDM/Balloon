@@ -70,7 +70,7 @@ public class GameHudScreenManager : MonoBehaviour
     void Update()
     {
         //hide or show arrow keys
-        if (inventoryManager.Seeds.First().Key == selectedSeed)
+        if (inventoryManager.Seeds.Keys.ToList().First() == selectedSeed)
         {
             previousButton.gameObject.SetActive(false);
         }
@@ -79,7 +79,7 @@ public class GameHudScreenManager : MonoBehaviour
             previousButton.gameObject.SetActive(true);
         }
 
-        if (inventoryManager.Seeds.Last().Key == selectedSeed)
+        if (inventoryManager.Seeds.Keys.ToList().Last() == selectedSeed)
         {
             nextButton.gameObject.SetActive(false);
         }

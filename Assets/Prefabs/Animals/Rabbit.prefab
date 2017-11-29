@@ -186,8 +186,8 @@ MonoBehaviour:
   fruits: 01000000
   treeTypes: 00000000
   seeds:
-    m_keys: 0000000001000000
-    m_values: 280000003c000000
+    m_keys: 000000000100000002000000
+    m_values: 0a0000003200000028000000
   durationWithoutTrees: 60
   timeTillSeedDrops: 30
   seedDropEffectScript: {fileID: 114892860899521194}

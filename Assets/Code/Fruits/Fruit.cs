@@ -27,10 +27,5 @@ public class Fruit : MonoBehaviour {
         }
     }
 
-    public void OnDestroy()
-    {
-        //remove subscribers but how
-    }
-
     #endregion
 }
