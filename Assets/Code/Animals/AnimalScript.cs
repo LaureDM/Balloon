@@ -1,6 +1,7 @@
 ﻿﻿﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using AssemblyCSharp.Code.Controllers;
 using AssemblyCSharp.Code.Enums;
 using UnityEngine;
 
@@ -58,7 +59,15 @@ public class AnimalScript : MonoBehaviour
     private bool ateFruit;
 
     private float currentTimeTillSeedDrops;
+    private float timeTillAnimalWillLeave;
     private InventoryManager inventoryManager;
+    private TreeCollectionScript treeCollection;
+
+    private AnimalCollectionScript animalCollection;
+
+    private bool isLeaving;
+
+    private bool areTreesGone;
 
     #endregion
 
@@ -76,8 +85,16 @@ public class AnimalScript : MonoBehaviour
         navMeshAgent = GetComponent<UnityEngine.AI.NavMeshAgent>();
 
         currentTimeTillSeedDrops = timeTillSeedDrops;
+        timeTillAnimalWillLeave = durationWithoutTrees;
 
         inventoryManager = FindObjectOfType<InventoryManager>();
+        treeCollection = FindObjectOfType<TreeCollectionScript>();
+        animalCollection = FindObjectOfType<AnimalCollectionScript>();
+
+        //subscribe to tree collection to know about tree sort gone/restored events
+        treeCollection.OnTreeSortGone += OnTreeSortGone;
+        treeCollection.OnTreeSortRestored += OnTreeSortRestored;
+
         FindNewTarget();
     }
 
@@ -87,11 +104,9 @@ public class AnimalScript : MonoBehaviour
 
     void Update()
     {
-        if (currentTimeTillSeedDrops <= 0)
+        if (areTreesGone)
         {
-            ateFruit = false;
-            currentTimeTillSeedDrops = timeTillSeedDrops;
-            LeaveSeed();
+            timeTillAnimalWillLeave -= Time.deltaTime;
         }
 
         if (ateFruit)
@@ -99,10 +114,29 @@ public class AnimalScript : MonoBehaviour
             currentTimeTillSeedDrops -= Time.deltaTime;
         }
 
+        if (currentTimeTillSeedDrops <= 0)
+        {
+            ateFruit = false;
+            currentTimeTillSeedDrops = timeTillSeedDrops;
+            LeaveSeed();
+        }
+
+        if (timeTillAnimalWillLeave <= 0 && !isLeaving)
+        {
+            Leave();
+        }
+
         if (Vector3.Distance(transform.position, navMeshAgent.destination) > 1.0f || isGoingTowardsFood)
         {
+            //TODO is this correct?
             navMeshAgent.SetDestination(currentTarget);
 		} 
+        //animal was leaving and will disappear
+        else if (isLeaving)
+        {
+            Destroy(gameObject);
+        }
+        //animal reached target and will rest
         else 
         {
 			StartCoroutine(Rest());
@@ -141,18 +175,28 @@ public class AnimalScript : MonoBehaviour
 
     public void OnDestroy()
     {
+        //unsubscribe from all events
+
         if (currentFruitTarget != null)
         {
             currentFruitTarget.OnEaten -= OnFruitEaten;
-        }
+        }   
+
+        treeCollection.OnTreeSortGone -= OnTreeSortGone;
+        treeCollection.OnTreeSortRestored -= OnTreeSortRestored;
     }
 
     public void OnDisable()
     {
+        //unsubscribe from all events
+
         if (currentFruitTarget != null)
         {
             currentFruitTarget.OnEaten -= OnFruitEaten;
         }
+        
+        treeCollection.OnTreeSortGone -= OnTreeSortGone;
+        treeCollection.OnTreeSortRestored -= OnTreeSortRestored;
     }
 
     #endregion
@@ -201,6 +245,22 @@ public class AnimalScript : MonoBehaviour
     }
 
     /*
+    There are no more trees so animal leaves
+    */
+    public void Leave()
+    {
+        isLeaving = true;
+        currentTarget = animalCollection.gameObject.transform.position;
+    }
+
+    private bool CheckTreeOfInterest(TreeType type)
+    {
+        return treeTypes.Contains(type);
+    }
+
+    #region Events
+
+    /*
      * Subscription method when fruit eaten event is called
      */
     public void OnFruitEaten(GameObject fruit)
@@ -210,6 +270,38 @@ public class AnimalScript : MonoBehaviour
         currentFruitTarget = null;
         FindNewTarget();
     }
+
+    public void OnTreeSortGone(TreeType type)
+    {
+        foreach (TreeType tree in treeTypes)
+        {
+            if (!treeCollection.GoneTrees.Contains(tree))
+            {
+                return;
+            }
+        }    
+
+        //all tree types animal is attracted to are gone, his countdown will start
+        areTreesGone = true;
+    }
+
+    public void OnTreeSortRestored(TreeType type)
+    {
+        //a tree the animal is attracted to is restored
+        if (CheckTreeOfInterest(type))
+        {
+            //animal will stay in the forest
+            if (isLeaving)
+            {   
+                isLeaving = false;
+                areTreesGone = false;
+                timeTillAnimalWillLeave = durationWithoutTrees;
+                FindNewTarget();
+            }
+        }
+    }
+
+    #endregion
 
     public void PauseNavMeshAgent()
     {
@@ -289,7 +381,10 @@ public class AnimalScript : MonoBehaviour
 
         yield return new WaitForSeconds(3);
 
-        fruit.SetEaten();
+        if (fruit != null)
+        {
+            fruit.SetEaten();
+        }
 
         isEating = false;
     }
