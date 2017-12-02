@@ -4,6 +4,8 @@ public enum TreeType
 {
 	PINE_TREE,
 	APPLE_TREE,
-	OAK
+	OAK,
+	MEATBALL_TREE,
+	WALNUT_TREE
 }
 

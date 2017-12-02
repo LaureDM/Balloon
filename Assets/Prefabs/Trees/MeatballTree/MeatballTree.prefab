@@ -9,17 +9,17 @@ Prefab:
     m_Modifications: []
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
-  m_RootGameObject: {fileID: 1736764471572924}
+  m_RootGameObject: {fileID: 1938397471626004}
   m_IsPrefabParent: 1
---- !u!1 &1597163216239986
+--- !u!1 &1533907366797024
 GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   serializedVersion: 5
   m_Component:
-  - component: {fileID: 4321374737003108}
-  - component: {fileID: 114840651656170146}
+  - component: {fileID: 4377031923623820}
+  - component: {fileID: 114674984815492056}
   m_Layer: 0
   m_Name: FruitSpawnPosition
   m_TagString: Untagged
@@ -27,56 +27,56 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!1 &1736764471572924
+--- !u!1 &1938397471626004
 GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   serializedVersion: 5
   m_Component:
-  - component: {fileID: 4093519031013046}
-  - component: {fileID: 54582551999722482}
-  - component: {fileID: 114692755241417296}
+  - component: {fileID: 4093917162621512}
+  - component: {fileID: 54814291824979720}
+  - component: {fileID: 114560632041960900}
   m_Layer: 0
-  m_Name: AppleTree
+  m_Name: MeatballTree
   m_TagString: PineTree
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &4093519031013046
+--- !u!4 &4093917162621512
 Transform:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1736764471572924}
+  m_GameObject: {fileID: 1938397471626004}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 4321374737003108}
+  - {fileID: 4377031923623820}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!4 &4321374737003108
+--- !u!4 &4377031923623820
 Transform:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1597163216239986}
+  m_GameObject: {fileID: 1533907366797024}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 4.51}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 4093519031013046}
+  m_Father: {fileID: 4093917162621512}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!54 &54582551999722482
+--- !u!54 &54814291824979720
 Rigidbody:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1736764471572924}
+  m_GameObject: {fileID: 1938397471626004}
   serializedVersion: 2
   m_Mass: 1
   m_Drag: 0
@@ -86,12 +86,12 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &114692755241417296
+--- !u!114 &114560632041960900
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1736764471572924}
+  m_GameObject: {fileID: 1938397471626004}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6a570318e3d5e478986b3a57c77da8df, type: 3}
@@ -100,9 +100,9 @@ MonoBehaviour:
   growStages:
     m_keys: 01000000020000000300000000000000
     m_values:
-    - {fileID: 1636752472998582, guid: 59cb45fd80a8a4730b9d355697f44afe, type: 2}
-    - {fileID: 1731659086756496, guid: e6a67c21950fc49df85eea2db8a0fa83, type: 2}
-    - {fileID: 1669562728023184, guid: 936d6985899a643b0bf44293a87417c6, type: 2}
+    - {fileID: 1455699559883640, guid: c7c2d7e69e63748d5ac1ef182558ffd3, type: 2}
+    - {fileID: 1146682962031382, guid: c40f1e05aba1842bf9b4ceb88c0fab65, type: 2}
+    - {fileID: 1840202890971482, guid: ea6908e1d244843b3943bc8057fc71b2, type: 2}
     - {fileID: 1000011772256070, guid: 88fc5e9dc00ca4fba9857e0d1e679ff6, type: 2}
   growStageDurations:
     m_keys: 010000000200000003000000
@@ -115,16 +115,16 @@ MonoBehaviour:
     m_values: 460000001e000000
   timeTillNextAnimal: 40
   timeTillNextFruit: 15
-  fruitSpawnPosition: {fileID: 114840651656170146}
+  fruitSpawnPosition: {fileID: 114674984815492056}
   leavesParticlesPrefab: {fileID: 1163563870711770, guid: 803442ffd14f863478f4d366cfd614c7,
     type: 2}
-  type: 1
---- !u!114 &114840651656170146
+  type: 3
+--- !u!114 &114674984815492056
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1597163216239986}
+  m_GameObject: {fileID: 1533907366797024}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 22ab797dc94484267a65669dd9d0e7ed, type: 3}
