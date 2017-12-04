@@ -39,6 +39,9 @@ public class TreeScript : MonoBehaviour
     [SerializeField]
     private TreeType type;
 
+    [SerializeField]
+    private TreeUIManager treeUIManager;
+
     #endregion
 
     #region Fields
@@ -106,6 +109,8 @@ public class TreeScript : MonoBehaviour
         {
             TryToSpawnFruit();
         }
+
+        //detect on clicks
     }
 
     public void OnCollisionEnter(Collision collider)
@@ -252,6 +257,20 @@ public class TreeScript : MonoBehaviour
 
         GameObject particles = Instantiate(leavesParticlesPrefab, particlesPosition, transform.rotation) as GameObject;
         Destroy(particles, PARTICLE_DURATION);
+    }
+
+    #endregion
+
+    #region UI Callbacks
+
+    public void ShowTreePopup()
+    {
+        treeUIManager.ShowPopup(this);
+    }
+
+    public void HideTreePopup()
+    {
+        treeUIManager.HidePopup();
     }
 
     #endregion
