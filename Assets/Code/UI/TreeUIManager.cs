@@ -8,22 +8,20 @@ public class TreeUIManager : MonoBehaviour {
 	[SerializeField]
 	private GameObject treePopupPrefab;
 
+	private TreePopupManager treePopupManager;
+
+
 	// Use this for initialization
 	void Start () 
 	{
 		gameObject.SetActive(false);
 		Instantiate(treePopupPrefab, transform.position, transform.rotation, gameObject.transform);
-	}
-	
-	// Update is called once per frame
-	void Update () 
-	{
-		
+		TreeScript treeScript = GetComponentInParent<TreeScript>();
+		treePopupManager.TreeScript = treeScript;
 	}
 
-	public void ShowPopup(TreeScript tree)
+	public void ShowPopup()
 	{
-		//treePopup.SetTree(tree);
 		gameObject.SetActive(true);
 	}
 

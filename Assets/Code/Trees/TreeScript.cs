@@ -219,6 +219,11 @@ public class TreeScript : MonoBehaviour
         return possibleAnimals.First().Key;
     }
 
+    public float GetGrowProgress()
+    {
+        return ((Time.time - startTime)/currentDuration) * 100;
+    }
+
     #endregion
 
     #region Coroutines
@@ -265,7 +270,7 @@ public class TreeScript : MonoBehaviour
 
     public void ShowTreePopup()
     {
-        treeUIManager.ShowPopup(this);
+        treeUIManager.ShowPopup();
     }
 
     public void HideTreePopup()
