@@ -36,8 +36,10 @@ public class TreeScript : MonoBehaviour
     [SerializeField]
     private GameObject leavesParticlesPrefab;
 
+    public TreeType type;
+
     [SerializeField]
-    private TreeType type;
+    private TreeUIManager treeUIManager;
 
     #endregion
 
@@ -106,6 +108,8 @@ public class TreeScript : MonoBehaviour
         {
             TryToSpawnFruit();
         }
+
+        //detect on clicks
     }
 
     public void OnCollisionEnter(Collision collider)
@@ -214,6 +218,11 @@ public class TreeScript : MonoBehaviour
         return possibleAnimals.First().Key;
     }
 
+    public float GetGrowProgress()
+    {
+        return ((Time.time - startTime)/currentDuration);
+    }
+
     #endregion
 
     #region Coroutines
@@ -252,6 +261,20 @@ public class TreeScript : MonoBehaviour
 
         GameObject particles = Instantiate(leavesParticlesPrefab, particlesPosition, transform.rotation) as GameObject;
         Destroy(particles, PARTICLE_DURATION);
+    }
+
+    #endregion
+
+    #region UI Callbacks
+
+    public void ShowTreePopup()
+    {
+        treeUIManager.ShowPopup();
+    }
+
+    public void HideTreePopup()
+    {
+        treeUIManager.HidePopup();
     }
 
     #endregion
