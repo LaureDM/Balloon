@@ -36,8 +36,7 @@ public class TreeScript : MonoBehaviour
     [SerializeField]
     private GameObject leavesParticlesPrefab;
 
-    [SerializeField]
-    private TreeType type;
+    public TreeType type;
 
     [SerializeField]
     private TreeUIManager treeUIManager;
@@ -221,7 +220,7 @@ public class TreeScript : MonoBehaviour
 
     public float GetGrowProgress()
     {
-        return ((Time.time - startTime)/currentDuration) * 100;
+        return ((Time.time - startTime)/currentDuration);
     }
 
     #endregion

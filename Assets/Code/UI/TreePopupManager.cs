@@ -1,8 +1,22 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class TreePopupManager : MonoBehaviour {
+
+    #region Serialize Fields
+    
+    [SerializeField]
+    private Text treeName;
+
+    [SerializeField]
+    private Slider slider;
+
+    [SerializeField]
+    private Image growStageIcon;
+
+    #endregion
 
     private TreeScript treeScript;
 
@@ -28,12 +42,19 @@ public class TreePopupManager : MonoBehaviour {
 	// Update is called once per frame
 	void Update () 
 	{
-		//TODO show grow stage duration
+        if (TreeScript.IsAdult())
+        {
+            //TODO display something else
+            slider.gameObject.SetActive(false);
+            return;
+        }
+        
+        slider.value = TreeScript.GetGrowProgress();
 	}
 
     public void InitializeDialog()
     {
-        //TODO
+        treeName.text = TreeTypeMapper.GetStringValue(TreeScript.type);
     }
 
     //TODO FOR TESTING

@@ -167,11 +167,10 @@ MonoBehaviour:
     - {fileID: 1669562728023184, guid: 936d6985899a643b0bf44293a87417c6, type: 2}
     - {fileID: 1000011772256070, guid: 88fc5e9dc00ca4fba9857e0d1e679ff6, type: 2}
   growStageDurations:
-    m_keys: 010000000200000003000000
+    m_keys: 0100000002000000
     m_values:
-    - 3
-    - 3
-    - 3
+    - 10
+    - 30
   possibleAnimals:
     m_keys: 0000000001000000
     m_values: 460000001e000000

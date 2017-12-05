@@ -420,6 +420,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5aadecac3179d455f83e022554ed0c30, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  treeName: {fileID: 114528593845788990}
+  slider: {fileID: 114818252306004290}
+  growStageIcon: {fileID: 114786812891317898}
 --- !u!114 &114743511538778960
 MonoBehaviour:
   m_ObjectHideFlags: 1
