@@ -38,6 +38,7 @@ GameObject:
   - component: {fileID: 33499319910763782}
   - component: {fileID: 23683161046637268}
   - component: {fileID: 65101946906418556}
+  - component: {fileID: 95212154800228488}
   m_Layer: 0
   m_Name: Cardboard_Rabbit
   m_TagString: Untagged
@@ -172,6 +173,23 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.020031497, y: 0.086768344, z: 0.08614616}
   m_Center: {x: 0.00019354, y: 0.00392484, z: 0.04336649}
+--- !u!95 &95212154800228488
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1457197874458012}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: b4a159e738525428297d18b733e62dd7, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
 --- !u!114 &114051275365092282
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -206,6 +224,7 @@ MonoBehaviour:
   durationWithoutTrees: 60
   timeTillSeedDrops: 30
   seedDropEffectScript: {fileID: 114051275365092282}
+  animalController: {fileID: 95212154800228488}
 --- !u!195 &195944929428672954
 NavMeshAgent:
   m_ObjectHideFlags: 1

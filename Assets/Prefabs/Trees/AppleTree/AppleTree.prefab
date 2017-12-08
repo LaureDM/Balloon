@@ -172,8 +172,8 @@ MonoBehaviour:
     - 10
     - 30
   possibleAnimals:
-    m_keys: 0000000001000000
-    m_values: 460000001e000000
+    m_keys: 000000000100000002000000
+    m_values: 280000001e0000001e000000
   timeTillNextAnimal: 40
   timeTillNextFruit: 15
   fruitSpawnPosition: {fileID: 114840651656170146}

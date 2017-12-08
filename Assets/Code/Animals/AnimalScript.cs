@@ -39,6 +39,9 @@ public class AnimalScript : MonoBehaviour
     [SerializeField]
     private SeedDropEffectScript seedDropEffectScript;
 
+    [SerializeField]
+    private Animator animalController;
+
     #endregion
 
     #region Fields
@@ -68,6 +71,7 @@ public class AnimalScript : MonoBehaviour
     private bool isLeaving;
 
     private bool areTreesGone;
+    private float originalSpeed;
 
     #endregion
 
@@ -94,6 +98,9 @@ public class AnimalScript : MonoBehaviour
         //subscribe to tree collection to know about tree sort gone/restored events
         treeCollection.OnTreeSortGone += OnTreeSortGone;
         treeCollection.OnTreeSortRestored += OnTreeSortRestored;
+
+        animalController.SetBool(AnimatorParameters.IS_WALKING, false);
+        originalSpeed = navMeshAgent.speed;
 
         FindNewTarget();
     }
@@ -128,8 +135,8 @@ public class AnimalScript : MonoBehaviour
 
         if (Vector3.Distance(transform.position, navMeshAgent.destination) > 1.0f || isGoingTowardsFood)
         {
-            //TODO is this correct?
-            navMeshAgent.SetDestination(currentTarget);
+            //let animal keep walking towards target
+            return;
 		} 
         //animal was leaving and will disappear
         else if (isLeaving)
@@ -217,6 +224,8 @@ public class AnimalScript : MonoBehaviour
         }
 
         Collider[] hitColliders = Physics.OverlapSphere(transform.position, 30f);
+
+        animalController.SetBool(AnimatorParameters.IS_WALKING, false);
 
         foreach (Collider fruit in hitColliders)
         {
@@ -356,6 +365,7 @@ public class AnimalScript : MonoBehaviour
             yield break;
         }
 
+        animalController.SetBool(AnimatorParameters.IS_WALKING, false);
         //TODO play rest animation and wait for it to end
         isResting = true;
 
@@ -364,6 +374,8 @@ public class AnimalScript : MonoBehaviour
         yield return new WaitForSeconds(3);
 
 		FindNewTarget();
+
+        animalController.SetBool(AnimatorParameters.IS_WALKING, true);
 		isResting = false;
 	}
 
