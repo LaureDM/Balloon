@@ -71,7 +71,6 @@ public class AnimalScript : MonoBehaviour
     private bool isLeaving;
 
     private bool areTreesGone;
-    private float originalSpeed;
 
     #endregion
 
@@ -100,7 +99,6 @@ public class AnimalScript : MonoBehaviour
         treeCollection.OnTreeSortRestored += OnTreeSortRestored;
 
         animalController.SetBool(AnimatorParameters.IS_WALKING, false);
-        originalSpeed = navMeshAgent.speed;
 
         FindNewTarget();
     }

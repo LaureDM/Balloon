@@ -304,7 +304,7 @@ Prefab:
     - target: {fileID: 224522343266647844, guid: 192eacb9c1d9647fcabf7a59191a8c56,
         type: 2}
       propertyPath: m_LocalPosition.x
-      value: 200
+      value: 259
       objectReference: {fileID: 0}
     - target: {fileID: 224522343266647844, guid: 192eacb9c1d9647fcabf7a59191a8c56,
         type: 2}
@@ -765,6 +765,47 @@ Transform:
   m_PrefabParentObject: {fileID: 4474105683676464, guid: 55ce32ee62289432b8193452b75f3f5d,
     type: 2}
   m_PrefabInternal: {fileID: 1502143907}
+--- !u!1 &1558532051
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 1558532053}
+  - component: {fileID: 1558532052}
+  m_Layer: 0
+  m_Name: WeatherEffectController
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1558532052
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1558532051}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3760f77bbc1a04fc48e822d604e0ef89, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rainParticlesPrefab: {fileID: 0}
+--- !u!4 &1558532053
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1558532051}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 12
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1565152612
 Prefab:
   m_ObjectHideFlags: 0

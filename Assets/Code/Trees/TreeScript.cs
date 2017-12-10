@@ -41,6 +41,12 @@ public class TreeScript : MonoBehaviour
     [SerializeField]
     private TreeUIManager treeUIManager;
 
+    [SerializeField]
+    public int maximumAmountWater;
+
+    [SerializeField]
+    private float absorptionSpeed;
+
     #endregion
 
     #region Fields
@@ -61,6 +67,10 @@ public class TreeScript : MonoBehaviour
 
     private Vector3 treeScale;
     private float currentDuration;
+
+    private float currentAmountWater = 0;
+
+    private WeatherEffectController weather;
 
     #endregion
 
@@ -83,6 +93,7 @@ public class TreeScript : MonoBehaviour
         rigidBody = GetComponent<Rigidbody>();
         animalSpawner = FindObjectOfType<AnimalCollectionScript>();
         treeCollection = FindObjectOfType<TreeCollectionScript>();
+        weather = FindObjectOfType<WeatherEffectController>();
     }
 
     #endregion
@@ -109,7 +120,22 @@ public class TreeScript : MonoBehaviour
             TryToSpawnFruit();
         }
 
-        //detect on clicks
+        if (currentAmountWater >= maximumAmountWater)
+        {
+            //tree will drown
+            //TODO animation and effect
+            Destroy(this.gameObject);
+        }
+
+        //Tree will soak up water over time
+        if (weather.IsRaining)
+        {
+            currentAmountWater += Time.deltaTime;
+        }
+        else if (currentAmountWater > 0)
+        {
+            currentAmountWater = currentAmountWater - Time.deltaTime <= 0 ? 0 : currentAmountWater - Time.deltaTime;
+        }
     }
 
     public void OnCollisionEnter(Collision collider)
@@ -221,6 +247,11 @@ public class TreeScript : MonoBehaviour
     public float GetGrowProgress()
     {
         return ((Time.time - startTime)/currentDuration);
+    }
+
+    public void ChangeWaterLevel(int water)
+    {
+        currentAmountWater += water;
     }
 
     #endregion

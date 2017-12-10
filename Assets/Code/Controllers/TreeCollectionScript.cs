@@ -124,5 +124,10 @@ namespace AssemblyCSharp.Code.Controllers
                 }
             }
         }
+
+        public TreeScript[] GetTreeScripts()
+        {
+            return GetComponentsInChildren<TreeScript>();
+        }
     }
 }
